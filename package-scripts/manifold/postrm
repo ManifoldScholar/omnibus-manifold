@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+# Perform necessary manifold removal steps
+# after package is uninstalled.
+#
+
+echo "manifold has been uninstalled!"
+
+exit 0
