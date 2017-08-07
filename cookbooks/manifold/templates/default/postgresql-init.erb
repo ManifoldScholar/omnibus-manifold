@@ -1,0 +1,28 @@
+#!/bin/sh
+
+#
+# make postgresql stop/restart send sigint to terminate clients to postgresql
+# immediately.
+#
+
+RETVAL=0
+
+case "$1" in
+stop|force-stop)
+/opt/manifold/embedded/bin/sv once postgresql
+/opt/manifold/embedded/bin/sv interrupt postgresql
+RETVAL=$?
+;;
+restart)
+/opt/manifold/embedded/bin/sv once postgresql
+/opt/manifold/embedded/bin/sv interrupt postgresql
+sleep 5
+/opt/manifold/embedded/bin/sv start postgresql
+RETVAL=$?
+;;
+*)
+/opt/manifolds/embedded/bin/sv $1 postgresql
+RETVAL=$?
+esac
+
+exit $RETVAL

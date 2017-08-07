@@ -1,0 +1,13 @@
+# This file is managed by manifold-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/manifold/manifold.rb
+# and run `sudo manifold-ctl reconfigure`.
+
+# -----------------------------
+# Elasticsearch configuration file
+# -----------------------------
+#
+path:
+  data: <%= @data_dir %>
+  logs: <%= @log_directory %>
+http:
+  port: <%= @port %>

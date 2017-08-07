@@ -1,0 +1,4 @@
+#!/bin/sh
+exec 2>&1
+cd <%= node['manifold']['nginx']['dir'] %>
+exec chpst -P /opt/manifold/embedded/sbin/nginx -p <%= node['manifold']['nginx']['dir'] %>

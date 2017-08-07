@@ -1,17 +1,102 @@
 #!/bin/sh
 #
-# Perform necessary manifold setup steps
+# Perform necessary Manifold setup steps
 # after package is installed.
 #
+DEST_DIR=/opt/manifold
+EXTERNAL_URL=http://$(hostname -f)
 
-PROGNAME=`basename $0`
-
-error_exit()
+notify()
 {
-  echo "${PROGNAME}: ${1:-"Unknown Error"}" 1>&2
-  exit 1
+  echo "manifold: $1"
 }
 
-echo "Thank you for installing manifold!"
+manifold_ascii()
+{
+cat <<BANNER
+                     Manifold Scholarship
 
-exit 0
+  ╦
+  ░░░╬φ╦,                                               ,╓╤
+  ░░░╬░░░░░╬╦╦,                                  ,╓╦φ╣╬░░░░
+  ░░░    "╚╬░░░░╬▒╦╦,                     ,╓╦φ╬╬░░░░░╬╩╙"
+  ░░░         `╙╩╬░░░░╬φ╦╖         ,╓╦φ╣╬░░░░░╬╩╙"
+  ░░░               "╙╩░░░░░╬╦╦φ╣╬░░░░░╬╩╙"            ,╔╦φ
+  ░░░                ,╓╦╬░░░░░░░░░░░░,          ,╓╦φ╬╬░░░░░
+  ░░░         ,╓╦φ▒╬░░░░░╬╩╨╠░░░╙╩╬░░░░╬▒╦╦╦φ╬╬░░░░░╩╩╙`
+  ░░░   ,╦φ╣╬░░░░░╬╩╨"      ]░░░     "╙╩░░░░░░░░░
+  ░░░╬░░░░░░╩╨"            ,╠░░░           "╚╬░░░░░╬╦╦,╔╦ê╬
+  ░░╬╩╩"            ,╓╦φ╣╬░░░░░░                `╙╩╬░░░░░░░
+             ,╓╦φ╣╬░░░░░╬╩╙"╠░░░                      `║░░░
+      ,╓╦φ╣╬░░░░░╬╩╙"       ]░░░                       ║░░░
+  φ╣╬░░░░░╬╩╨"            ,╔╣░░░                       ║░░░
+  ░╬╩╙`            ,╓╦φ╬╬░░░░░░░                       ║░░░
+            ,╓╦φ╬╬░░░░░╩╩╙` ╠░░░                       ║░░░
+     ,╓╦φ╣╬░░░░░╩╩"`        ]░░░                       ║░░░
+  ╣╬░░░░░╩╩"`            ,╔╦╣░░░                       ║░░░
+  ╬╩╙`            ,╔╦φ╬░░░░░░░░░                       ║░░░
+           ,╔╦φ╬╬░░░░░╩╩"   ]░░░                       ║░░░
+    ,╔╦φ╣░░░░░░╩╩"`         ]░░░                       ║░░░
+  ░░░░░░╩╩"`            ,╦╦╣╬░░░╣╦╦,                   ║░░░
+  ╩"`            ,╦╦╣╬░░░░░╬╩╩╙╩╬░░░░╬▒╦╖              ║░░░
+         ,,╦╦▒╬░░░░░╬╩╙"           `╙╩╬░░░░╬φ╦╓        ║░░░
+   ,╦╦ê╣░░░░░░╩╨"                        "╚╬░░░░░╣╦╦,  ║░░░
+  ░░░░░╩╩"                                    `╙╩╬░░░░╬╬░░░
+  "                                                 `╙╩╬░░░
+                                                          "
+BANNER
+}
+
+print_banner()
+{
+    # Check if we have colors enabled
+    tput=$(which tput)
+    if [ -n "$tput" ]; then
+      ncolors=$($tput colors)
+      if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+        RED="$(tput setaf 1)"
+        YELLOW="$(tput setaf 3)"
+        NOCOLOR="$(tput sgr0)"
+      else
+        RED=""
+        YELLOW=""
+        NOCOLOR=""
+      fi
+    fi
+
+    echo ""
+    echo "$RED"
+    echo "$(manifold_ascii)"
+    echo "$NOCOLOR"
+    echo ""
+}
+
+create_config_template()
+{
+  # Create a minimal manifold.rb template if /etc/manifold/manifold.rb does not exist.
+  if ! [ -e /etc/manifold/manifold.rb ] ; then
+    mkdir -p /etc/manifold
+    cp "${DEST_DIR}/etc/manifold.rb" /etc/manifold/manifold.rb
+    sed -i '.original', "s/GENERATED_EXTERNAL_URL/$EXTERNAL_URL/g" /etc/manifold/manifold.rb
+    chmod 600 /etc/manifold/manifold.rb
+  else
+    EXTERNAL_URL=$(awk '/^external_url/ { print $2 }' /etc/manifold/manifold.rb | tr -d "'\"")
+  fi
+}
+
+print_welcome()
+{
+  print_banner
+  notify "Thank you for installing Manifold!"
+  notify "To configure and start Manifold, RUN THE FOLLOWING COMMAND:"
+  echo ""
+  echo "sudo manifold-ctl reconfigure"
+  echo ""
+  notify "Manifold should be reachable at ${EXTERNAL_URL}"
+  notify "Otherwise configure Manifold for your system by editing /etc/manifold/manifold.rb file"
+  notify "And running reconfigure again."
+  notify
+}
+
+create_config_template
+print_welcome

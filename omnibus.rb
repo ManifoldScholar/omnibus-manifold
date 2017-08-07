@@ -11,9 +11,12 @@
 # uncomment the following options. This will prevent the need for root
 # permissions in most cases.
 #
-# Uncomment this line to change the default base directory to "local"
+#
+# Build internally only on OSX.
 # -------------------------------------------------------------------
-# base_dir './local'
+if RbConfig::CONFIG['host_os'] =~ /darwin|mac os/
+  base_dir './local'
+end
 #
 # Alternatively you can tune the individual values
 # ------------------------------------------------

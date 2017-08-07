@@ -1,0 +1,3 @@
+#!/bin/sh
+exec 2>&1
+exec chpst -P -U <%= node['manifold']['postgresql']['username'] %> -u <%= node['manifold']['postgresql']['username'] %> /opt/manifold/embedded/bin/postgres -D <%= File.join(node['manifold']['postgresql']['dir'], "data") %>

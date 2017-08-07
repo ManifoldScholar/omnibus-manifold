@@ -1,0 +1,17 @@
+# This file is managed by manifold-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/manifold/manifold.rb
+# and run `sudo manifold-ctl reconfigure`.
+
+# -----------------------------
+# Elasticsearch log config file
+# -----------------------------
+#
+status = error
+
+appender.console.type = Console
+appender.console.name = console
+appender.console.layout.type = PatternLayout
+appender.console.layout.pattern = [%d{ISO8601}][%-5p][%-25c{1.}] %marker%m%n
+
+rootLogger.level = info
+rootLogger.appenderRef.console.ref = console

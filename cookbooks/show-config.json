@@ -1,0 +1,3 @@
+{
+  "run_list": ["recipe[manifold::show_config]"]
+}

@@ -14,7 +14,6 @@ gem 'omnibus-software', github: 'opscode/omnibus-software'
 group :development do
   # Use Berkshelf for resolving cookbook dependencies
   gem 'berkshelf', '~> 3.3'
-
   # Use Test Kitchen with Vagrant for converging the build environment
   gem 'test-kitchen',    '~> 1.4'
   gem 'kitchen-vagrant', '~> 0.18'

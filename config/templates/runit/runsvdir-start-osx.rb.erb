@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+RUNIT_PATH = "<%= install_dir %>/bin:<%= install_dir %>/embedded/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin"
+SERVICE_DIR = "<%= install_dir %>/service"
+
+def hangup(pid)
+  $stderr.puts "sending HUP to #{pid}"
+  Process.kill('HUP', pid)
+end
+
+def command
+	exec({ "PATH" => RUNIT_PATH },
+			 "<%= install_dir %>/embedded/bin/runsvdir",
+			 "-P",
+			 SERVICE_DIR,
+			 %['log: #{?. * 394}'],
+			 umask: 0022,
+			 pgroup: true
+	)
+end
+
+def init
+  runit = fork do
+		command
+	end
+	trap('INT') { hangup runit }
+	trap('TERM') { hangup runit }
+
+	Process.wait runit
+end
+
+init

@@ -1,0 +1,119 @@
+#!/bin/bash
+
+# This wrapper is meant to be invoked by omnibus-manifold via Runit
+
+# Let runit capture all script error messages
+exec 2>&1
+
+function assert_non_empty
+{
+  if [ -z "$(eval echo \$$1)" ] ; then
+    echo "$0 error: \$$1 is empty"
+    exit 1
+  fi
+}
+
+# We expect the following variables to be set for us in the environment
+assert_non_empty current_pidfile
+assert_non_empty process_name
+assert_non_empty src_dir
+assert_non_empty rails_app
+assert_non_empty user
+assert_non_empty environment
+assert_non_empty puma_rb
+
+readonly oldbin_pidfile=${current_pidfile}.oldbin
+
+function main
+{
+  cd /opt/manifold/embedded/src/${src_dir}
+  find_us_a_puma
+  trap_signals
+  wait_for_puma_to_exit
+}
+
+function find_us_a_puma
+{
+  adopt ${current_pidfile}
+  if [[ ${puma_pid} ]]; then
+    echo "adopted existing puma master ${puma_pid}"
+    return
+  fi
+
+  adopt ${oldbin_pidfile}
+  if [[ ${puma_pid} ]]; then
+    echo "adopted existing oldbin puma master ${puma_pid}"
+    return
+  fi
+
+  echo "starting new puma master"
+  start_puma_master
+
+  adopt ${current_pidfile}
+  if [[ ${puma_pid} ]]; then
+    echo "adopted new puma master ${puma_pid}"
+    return
+  fi
+
+  echo "failed to start a new puma master"
+  exit
+}
+
+function adopt
+{
+  local pid=$(cat $1 2>/dev/null)
+  if alive ${pid} && is_puma ${pid}; then
+    readonly puma_pid=${pid}
+  fi
+}
+
+function alive
+{
+  kill -0 $1 > /dev/null 2>&1
+}
+
+function is_puma
+{
+  ps -p $1 -o args | grep -q ${process_name}
+}
+
+function start_puma_master
+{
+  chpst -e /opt/manifold/etc/manifold/${src_dir}/env -U ${user} \
+    /opt/manifold/embedded/bin/bundle exec puma \
+      -d \
+      -e ${environment} \
+      -C ${puma_rb} \
+      /opt/manifold/embedded/src/${src_dir}/config.ru
+}
+
+function trap_signals
+{
+  # Forward all common runit signals except:
+  # - HUP which we handle below;
+  # - KILL which cannot be caught.
+  for sig in STOP CONT ALRM INT QUIT USR1 USR2 TERM; do
+    trap "forward_signal ${sig}" ${sig}
+  done
+
+  # Omnibus-ctl does not have a subcommand that sends USR2 but it can send HUP.
+  # To allow for reloading puma from the command line, translate HUP to
+  # USR2.
+  trap "echo 'wrapper received HUP'; forward_signal USR2" HUP
+}
+
+function forward_signal
+{
+  echo "forwarding $1 to puma master ${puma_pid}"
+  kill -$1 ${puma_pid}
+}
+
+function wait_for_puma_to_exit
+{
+  while sleep ${puma_poll_alive}; do
+    alive ${puma_pid} || break
+  done
+}
+
+main
+echo "wrapper for puma master ${puma_pid} exiting"

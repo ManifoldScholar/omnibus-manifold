@@ -1,0 +1,5 @@
+#!/bin/sh
+exec 2>&1
+
+umask 077
+exec chpst -P -U <%= node['manifold']['redis']['username'] %> -u <%= node['manifold']['redis']['username'] %> /opt/manifold/embedded/bin/redis-server <%= File.join(node['manifold'][@options[:service]]['dir'], "redis.conf") %>

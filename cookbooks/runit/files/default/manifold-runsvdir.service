@@ -1,0 +1,10 @@
+[Unit]
+Description=Manifold Runit supervision process
+After=basic.target
+
+[Service]
+ExecStart=/opt/manifold/embedded/bin/runsvdir-start
+Restart=always
+
+[Install]
+WantedBy=basic.target

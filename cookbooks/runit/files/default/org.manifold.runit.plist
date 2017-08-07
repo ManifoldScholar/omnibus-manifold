@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>ExitTimeOut</key>
+        <integer>10</integer>
+        <key>KeepAlive</key>
+        <false/>
+        <key>Label</key>
+        <string>org.manifold.runit</string>
+        <key>OnDemand</key>
+        <false/>
+        <key>ProgramArguments</key>
+        <array>
+            <string>/opt/manifold/embedded/bin/runsvdir-start</string>
+        </array>
+        <key>QueueDirectories</key>
+        <array>
+            <string>/service</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>StandardErrorPath</key>
+        <string>/var/log/manifold/launchd/org.manifold.runit.stderr</string>
+        <key>StandardOutPath</key>
+        <string>/var/log/manifold/launchd/org.manifold.runit.stdout</string>
+        <key>UserName</key>
+        <string>root</string>
+    </dict>
+</plist>

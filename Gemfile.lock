@@ -190,9 +190,10 @@ PLATFORMS
 DEPENDENCIES
   berkshelf (~> 3.3)
   kitchen-vagrant (~> 0.18)
+  mixlib-versioning (~> 1.2)
   omnibus (~> 5.6)
   omnibus-software!
   test-kitchen (~> 1.4)
 
 BUNDLED WITH
-   1.15.2
+   1.15.3

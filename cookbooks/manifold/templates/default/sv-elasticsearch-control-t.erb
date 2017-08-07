@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "Received TERM from runit, sending to process group (-PID)"
+echo "cat /opt/manifold/service/<%= @options[:service] %>/supervise/pid"
+kill -- -$(cat /opt/manifold/service/<%= @options[:service] %>/supervise/pid)

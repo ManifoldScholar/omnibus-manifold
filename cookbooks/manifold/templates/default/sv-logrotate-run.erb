@@ -1,0 +1,10 @@
+#!/bin/sh
+exec 2>&1
+
+cd <%= node['manifold']['logrotate']['dir'] %>
+
+exec /opt/manifold/embedded/bin/chpst -P /usr/bin/env \
+dir=<%= node['manifold']['logrotate']['dir'] %> \
+pre_sleep=<%= node['manifold']['logrotate']['pre_sleep'] %> \
+post_sleep=<%= node['manifold']['logrotate']['post_sleep'] %> \
+/opt/manifold/embedded/bin/manifold-logrotate-wrapper

@@ -1,0 +1,52 @@
+# This file is managed by manifold-ctl. Manual changes will be
+# erased! To change the contents below, edit /etc/manifold/manifold.rb
+# and run `sudo manifold-ctl reconfigure`.
+
+user <%= node['manifold']['web-server']['username'] %> <%= node['manifold']['web-server']['group'] %>;
+worker_processes <%= @worker_processes %>;
+error_log stderr;
+pid nginx.pid;
+
+daemon off;
+
+events {
+worker_connections <%= @worker_connections %>;
+}
+
+http {
+log_format manifold_access '<%= @manifold_access_log_format %>';
+
+server_names_hash_bucket_size <%= @server_names_hash_bucket_size %>;
+
+sendfile <%= @sendfile %>;
+tcp_nopush <%= @tcp_nopush %>;
+tcp_nodelay <%= @tcp_nodelay %>;
+
+keepalive_timeout <%= @keepalive_timeout %>;
+
+gzip <%= @gzip %>;
+gzip_http_version <%= @gzip_http_version %>;
+gzip_comp_level <%= @gzip_comp_level %>;
+gzip_proxied <%= @gzip_proxied %>;
+gzip_types <%= @gzip_types.join(' ') %>;
+
+include /opt/manifold/embedded/conf/mime.types;
+
+proxy_cache_path <%= @proxy_cache_path %>;
+proxy_cache <%= @proxy_cache %>;
+
+map $http_upgrade $connection_upgrade {
+default upgrade;
+''      close;
+}
+
+<% if @manifold_http_config %>
+    include <%= @manifold_http_config %>;
+<% end %>
+
+<% if @nginx_status_config %>
+    include <%= @nginx_status_config %>;
+<% end %>
+
+<%= @custom_nginx_config %>
+}

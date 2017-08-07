@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd <%= @options[:rails_src] %>
+exec 2>&1
+exec chpst -e <%= @options[:static_etc_dir] %>/env -P \
+-U <%= @options[:user] %> -u <%= @options[:user] %> \
+/opt/manifold/embedded/bin/bundle exec clockwork clock.rb

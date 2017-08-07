@@ -1,0 +1,8 @@
+#!/bin/sh
+
+cd <%= @options[:client_src] %>
+exec 2>&1
+
+exec chpst -P \
+-U <%= @options[:user] %> -u <%= @options[:user] %> \
+/opt/manifold/embedded/nodejs/bin/node dist/node/server-client.js

@@ -1,0 +1,15 @@
+#################################################
+# API Environment
+#################################################
+RACK_ENV=<%= @api["environment"] %>
+RAILS_ENV=<%= @api["environment"] %>
+RAILS_SECRET_KEY=<%= @api["secret_key_base"] %>
+CLIENT_URL=<%= @api_url %>
+API_URL=<%= @api_url %>
+RAILS_REDIS_URL=redis://127.0.0.1:<%= @api["redis_port"] %>
+RAILS_ROOT=<%= @api["src"] %>
+RAILS_SERVER_LOG_DIR=<%= @api["log_directory"] %>
+RAILS_DB_PASS=<%= single_quote(@api["db_password"]) %>
+RAILS_DB_USER=<%= single_quote(@api["db_username"]) %>
+RAILS_DB_NAME=<%= @api["db_database"] %>
+ELASTICSEARCH_URL=<%= @elasticsearch_url %>

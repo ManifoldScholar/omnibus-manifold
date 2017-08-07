@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# Symlink the ctl commands
+DEST_DIR=${1:-/opt/manifold}
+
+error_exit()
+{
+    echo "${1:-"Unknown Error"}" 1>&2
+    exit 1
+}
+
+create_symlinks()
+{
+    ln -s ${DEST_DIR}/bin/manifold-ctl /usr/local/bin/manifold-ctl || error_exit "Failed to create manifold-ctl symlink in /usr/bin"
+    ln -s ${DEST_DIR}/bin/manifold-rake /usr/local/bin/manifold-rake || error_exit "Failed to create manifold-rake symlink in /usr/bin"
+    ln -s ${DEST_DIR}/bin/manifold-api /usr/local/bin/manifold-api || error_exit "Failed to create manifold-api symlink in /usr/bin"
+    ln -s ${DEST_DIR}/bin/manifold-psql /usr/local/bin/manifold-psql || error_exit "Failed to create manifold-psql symlink in /usr/bin"
+}
+
+create_symlinks
