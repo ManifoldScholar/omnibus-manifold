@@ -7,6 +7,8 @@ gem 'omnibus', '~> 5.6'
 # software definitions, but you can clone/fork Chef's to get you started.
 gem 'omnibus-software', github: 'opscode/omnibus-software'
 
+gem 'rake'
+
 # This development group is installed by default when you run `bundle install`,
 # but if you are using Omnibus in a CI-based infrastructure, you do not need
 # the Test Kitchen-based build lab. You can skip these unnecessary dependencies

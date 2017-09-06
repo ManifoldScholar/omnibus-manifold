@@ -138,6 +138,7 @@ GEM
       zhexdump (>= 0.0.2)
     plist (3.3.0)
     progressbar (1.8.2)
+    rake (10.4.2)
     retryable (2.0.4)
     ridley (4.4.2)
       addressable
@@ -190,9 +191,9 @@ PLATFORMS
 DEPENDENCIES
   berkshelf (~> 3.3)
   kitchen-vagrant (~> 0.18)
-  mixlib-versioning (~> 1.2)
   omnibus (~> 5.6)
   omnibus-software!
+  rake
   test-kitchen (~> 1.4)
 
 BUNDLED WITH
