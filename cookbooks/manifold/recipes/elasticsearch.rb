@@ -37,7 +37,7 @@ directory elasticsearch_plugin_dir do
 end
 
 execute "chown-elasticsearch-config-dir" do
-  command "chown -R #{elasticsearch_user} #{elasticsearch_plugin_dir}"
+  command "chown -R #{elasticsearch_user} #{elasticsearch_config_dir}"
   user "root"
   action :run
 end
