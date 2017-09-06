@@ -153,19 +153,23 @@ include_recipe "manifold::logrotate_folders_and_configs"
 # Configure Services
 # TODO: ElasticSearch
 [
-    "puma",
-    "cable",
-    "client",
-    "sidekiq",
+    "elasticsearch",
     "nginx",
     "logrotate",
     "bootstrap",
+    "client",
+    "sidekiq",
     "clockwork",
-    "elasticsearch"
+    "puma",
+    "cable"
 ].each do |service|
   if node["manifold"][service]["enable"]
     include_recipe "manifold::#{service}"
   else
     include_recipe "manifold::#{service}_disable"
   end
+end
+
+execute "/opt/manifold/bin/manifold-api searchkick:reindex:all" do
+  retries 5
 end
