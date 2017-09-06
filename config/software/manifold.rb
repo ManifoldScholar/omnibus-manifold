@@ -1,7 +1,6 @@
-name "manifold-app"
+name "manifold"
 
-# TODO: Restore master branch.
-default_version 'zd/dev'
+default_version 'master'
 version 'master' do
   source git: 'https://github.com/ManifoldScholar/manifold.git'
 end
