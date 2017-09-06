@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cd <%= @options[:elasticsearch_data_dir] %>/
-
+export JAVA_HOME=/opt/manifold/embedded/jre/
 exec 2>&1
 
 exec chpst -P \

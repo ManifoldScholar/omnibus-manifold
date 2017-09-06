@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-name "server-jre"
+name "jre"
 default_version "8u144"
 
 unless _64_bit?
@@ -42,14 +42,22 @@ license_warning = "By including the JRE, you accept the terms of the Oracle Bina
 license_cookie = "gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"
 
 version "8u144" do
-  # https://www.oracle.com/webfolder/s/digest/8u121checksum.html
-  source url: "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/server-jre-8u144-linux-x64.tar.gz",
-         sha256: "8ba6f1c692518beb0c727c6e1fb8c30a5dfcc38f8ef9f4f7c7c114c01c747ebc",
-         cookie: license_cookie,
-         warning: license_warning,
-         unsafe:  true
-
-  relative_path "jdk1.8.0_144"
+  if mac_os_x?
+    # https://www.oracle.com/webfolder/s/digest/8u121checksum.html
+    source url: "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jre-8u144-macosx-x64.tar.gz",
+           sha256: "6430664d0d883e662084c0f3a519bd34640e9bb4f54966476a8ca45b97de8f45",
+           cookie: license_cookie,
+           warning: license_warning,
+           unsafe:  true
+    relative_path "jre1.8.0_144.jre/Contents/Home"
+  else
+    source url: "http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jre-8u144-linux-x64.tar.gz",
+           sha256: "4e6e11aad54ae3c716a5607ee88d81f3f1e8b5b23ee474b0272dba351ee9f28a",
+           cookie: license_cookie,
+           warning: license_warning,
+           unsafe:  true
+    relative_path "jdk1.8.0_144"
+  end
 end
 
 build do

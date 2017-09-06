@@ -10,6 +10,9 @@ elasticsearch_port = node['manifold']['elasticsearch']['port']
 elasticsearch_user = account_helper.elasticsearch_user
 elasticsearch_group = account_helper.elasticsearch_group
 elasticsearch_config = ""
+elasticsearch_plugin_dir= "#{node['package']['install-dir']}/embedded/elasticsearch/plugins"
+elasticsearch_config_dir= "#{node['package']['install-dir']}/embedded/elasticsearch/config"
+
 if node[:platform] == "mac_os_x"
   svc_group = "wheel"
 else
@@ -25,6 +28,24 @@ account "Elasticsearch user and group" do
   shell node['manifold']['elasticsearch']['shell']
   home node['manifold']['elasticsearch']['home']
   manage node['manifold']['manage-accounts']['enable']
+end
+
+directory elasticsearch_plugin_dir do
+  owner elasticsearch_user
+  mode "0755"
+  recursive true
+end
+
+execute "chown-elasticsearch-config-dir" do
+  command "chown -R #{elasticsearch_user} #{elasticsearch_plugin_dir}"
+  user "root"
+  action :run
+end
+
+directory elasticsearch_config_dir do
+  owner elasticsearch_user
+  mode "0755"
+  recursive true
 end
 
 directory elasticsearch_dir do
@@ -44,7 +65,7 @@ end
   end
 end
 
-elasticsearch_config = File.join(elasticsearch_dir, "elasticsearch.conf")
+elasticsearch_config = File.join(elasticsearch_dir, "elasticsearch.yml")
 elasticsearch_log_config = File.join(elasticsearch_dir, "log4j2.properties")
 should_notify = omnibus_helper.should_notify?("elasticsearch")
 
