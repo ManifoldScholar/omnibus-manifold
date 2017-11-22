@@ -45,7 +45,7 @@ bash "migrate manifold-api database" do
   code <<-EOH
     set -e
     log_file="#{node['manifold']['manifold-api']['log_directory']}/manifold-api-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log"
-    umask 077
+    umask 0022
     /opt/manifold/bin/manifold-api db:migrate
     /opt/manifold/bin/manifold-api db:seed
     STATUS=${PIPESTATUS[0]}
