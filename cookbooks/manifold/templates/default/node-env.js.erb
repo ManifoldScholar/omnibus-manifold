@@ -1,4 +1,4 @@
-process.env.API_URL = "<%= @api_url %>"
-process.env.CABLE_URL = "<%= @cable_url %>"
-process.env.NODE_ENV = "production"
-process.env.CLIENT_SERVER_SOCKET = "<%= @client["socket"] %>"
+process.env.DOMAIN = "<%= @domain %>";
+process.env.NODE_ENV = "production";
+process.env.CLIENT_SERVER_SOCKET = "<%= @client["socket"] %>";
+process.env.API_URL = "http://<%= @domain %>:<%= @nginx["listen_port"] %>"

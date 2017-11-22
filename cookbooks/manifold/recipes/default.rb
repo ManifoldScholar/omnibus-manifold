@@ -112,6 +112,7 @@ vars = {
     api: node['manifold']['manifold-api'].to_hash,
     nginx: node['manifold']['nginx'].to_hash,
     client: node['manifold']['client'].to_hash,
+    domain: domain,
     api_url: api_url_parts.join(""),
     cable_url: cable_url_parts.join(""),
     elasticsearch_url: elasticsearch_url_parts.join("")
@@ -128,7 +129,7 @@ templatesymlink "Setup the API app environment" do
 end
 
 templatesymlink "Setup the client node app environment" do
-  link_from File.join(manifold_source_dir, "client/dist/node/", "env.js")
+  link_from File.join(manifold_source_dir, "client/dist/manifold", "server.config.js")
   link_to File.join("/var/opt/manifold/etc", "node-env.js")
   source "node-env.js.erb"
   owner root_user
@@ -138,7 +139,7 @@ templatesymlink "Setup the client node app environment" do
 end
 
 templatesymlink "Setup the client browser environment" do
-  link_from File.join(manifold_source_dir, "client/dist/www/build", "env.js")
+  link_from File.join(manifold_source_dir, "client/dist/manifold/www", "browser.config.js")
   link_to File.join("/var/opt/manifold/etc", "browser-env.js")
   source "browser-env.js.erb"
   owner root_user
@@ -151,7 +152,6 @@ include_recipe "manifold::database_migrations" if node['manifold']['manifold-api
 include_recipe "manifold::logrotate_folders_and_configs"
 
 # Configure Services
-# TODO: ElasticSearch
 [
     "elasticsearch",
     "nginx",

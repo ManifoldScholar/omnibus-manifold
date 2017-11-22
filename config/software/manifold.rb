@@ -1,7 +1,7 @@
 name "manifold"
 
-default_version 'master'
-version 'master' do
+default_version 'v0.3.1'
+version 'v0.3.1' do
   source git: 'https://github.com/ManifoldScholar/manifold.git'
 end
 
