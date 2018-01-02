@@ -20,7 +20,6 @@ module ManifoldApi
       end
 
       Manifold['manifold_api']['manifold_host'] = uri.host
-      Manifold['manifold_api']['manifold_email_from'] ||= "manifold@#{uri.host}"
 
       case uri.scheme
       when "http"

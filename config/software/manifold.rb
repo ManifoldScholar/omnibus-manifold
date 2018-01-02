@@ -1,7 +1,7 @@
 name "manifold"
 
-default_version 'v0.3.1'
-version 'v0.3.1' do
+default_version 'v0.3.3'
+version 'v0.3.3' do
   source git: 'https://github.com/ManifoldScholar/manifold.git'
 end
 
@@ -9,6 +9,8 @@ license :project_license
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
+  # Yarn will need node, so we'll add it to the path.
+  env["PATH"] = "#{install_dir}/embedded/nodejs/bin:#{env["PATH"]}"
 
   bundle_without = %w[development test]
   api_dir = "#{project_dir}/api"
@@ -22,10 +24,10 @@ build do
   )
 
   # Install Client node modules
-  command "yarn install", cwd: client_dir
+  command "yarn install", cwd: client_dir, env: env
 
   # Build source
-  command "yarn build", cwd: client_dir
+  command "yarn build", cwd: client_dir, env: env
 
   # Delete all gem archives
   command "find #{install_dir} -name '*.gem' -type f -print -delete"

@@ -3,7 +3,7 @@ account_helper = AccountHelper.new(node)
 client_src = node['manifold']['client']['src']
 client_listen_socket = node['manifold']['client']['socket']
 client_socket_dir = File.dirname(client_listen_socket)
-svc_group = node[:platform] == "mac_os_x" ? "wheel" : root
+svc_group = node[:platform] == "mac_os_x" ? "wheel" : "root"
 client_log_dir = node['manifold']['client']['log_directory']
 user = account_helper.manifold_user
 web_group = account_helper.web_server_group

@@ -29,7 +29,6 @@ server {
   listen <%= listen_address %>:<%= @redirect_http_to_https_port %>;
   <% end %>
   server_name <%= @fqdn %> localhost 127.0.0.1;
-  ## Don't show the nginx version number, a security best practice
   server_tokens off;
   return 301 https://<%= @fqdn %>:<%= @listen_port %>$request_uri;
   access_log  <%= @log_directory %>/manifold_access.log manifold_access;
@@ -38,19 +37,25 @@ server {
 <% end %>
 
 server {
+
+  ## Individual nginx logs for this Manifold vhost
+  access_log  <%= @log_directory %>/manifold_access.log manifold_access;
+  error_log   <%= @log_directory %>/manifold_error.log;
+
+  root <%= ManifoldClient.public_path %>;
+
   <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @listen_port %><% if @https %>ssl<% if @http2_enabled %> http2<% end %><% end %>;
   <% end %>
   server_name <%= @fqdn %> localhost 127.0.0.1;
-  ## Don't show the nginx version number, a security best practice
   server_tokens off;
 
   client_max_body_size 100M;
   client_body_timeout 180s;
   proxy_send_timeout 180s;
   proxy_read_timeout 180s;
-<% if @https %>
 
+<% if @https %>
   ## Strong SSL Security
   ## https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
   ssl on;
@@ -71,10 +76,9 @@ server {
   <% if @ssl_dhparam %>
   ssl_dhparam <%= @ssl_dhparam %>;
   <% end %>
-
 <% end %>
-<% if @real_ip_header %>
 
+<% if @real_ip_header %>
   ## Real IP Module Config
   ## http://nginx.org/en/docs/http/ngx_http_realip_module.html
   real_ip_header <%= @real_ip_header %>;
@@ -85,10 +89,6 @@ server {
 <% @real_ip_trusted_addresses.each do |trusted_address| %>
   set_real_ip_from <%= trusted_address %>;
 <% end %>
-
-  ## Individual nginx logs for this Manifold vhost
-  access_log  <%= @log_directory %>/manifold_access.log manifold_access;
-  error_log   <%= @log_directory %>/manifold_error.log;
 
   location /api {
     proxy_read_timeout                <%= @proxy_read_timeout %>;

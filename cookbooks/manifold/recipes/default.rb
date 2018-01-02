@@ -171,5 +171,5 @@ include_recipe "manifold::logrotate_folders_and_configs"
 end
 
 execute "/opt/manifold/bin/manifold-api searchkick:reindex:all" do
-  retries 5
+  retries 10
 end

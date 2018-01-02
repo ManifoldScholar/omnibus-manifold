@@ -7,7 +7,7 @@ define :puma_service, :rails_app => nil, :user => nil do
   rails_src= node['manifold'][rails_app]['src']
   svc = params[:name]
   user = params[:user]
-  svc_group = node[:platform] == "mac_os_x" ? "wheel" : root
+  svc_group = node[:platform] == "mac_os_x" ? "wheel" : "root"
   puma_dir = node['manifold'][svc]['dir']
   puma_rackup = node['manifold'][svc]['rackup']
   puma_etc_dir = File.join(rails_home, "etc")

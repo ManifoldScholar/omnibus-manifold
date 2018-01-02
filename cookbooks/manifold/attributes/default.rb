@@ -21,16 +21,13 @@ default['manifold']['manage-storage-directories']['enable']      = true
 default['manifold']['manage-storage-directories']['manage_etc']  = true
 
 ####
-# The Git User that services run as
+# The OS User that services run as
 ####
-# The username for the chef services user
 default['manifold']['user']['username'] = "manifold"
 default['manifold']['user']['group'] = "manifold"
 default['manifold']['user']['uid'] = nil
 default['manifold']['user']['gid'] = nil
-# The shell for the chef services user
 default['manifold']['user']['shell'] = "/bin/sh"
-# The home directory for the chef services user
 default['manifold']['user']['home'] = "/var/opt/manifold"
 
 ####
@@ -42,6 +39,11 @@ default['manifold']['client']['src'] = "#{node['package']['install-dir']}/embedd
 default['manifold']['client']['log_directory'] = "/var/log/manifold/client"
 default['manifold']['client']['environment'] = 'production'
 default['manifold']['client']['socket'] = '/var/opt/manifold/client/sockets/client.sock'
+if node[:platform] == "mac_os_x"
+  default['manifold']['client']['api_url'] = 'http://localhost:3030'
+else
+  default['manifold']['client']['api_url'] = 'http://localhost'
+end
 
 ####
 # Manifold API (Rails App)
@@ -61,18 +63,12 @@ default['manifold']['manifold-api']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/usr/local/bin:/bin:/usr/bin",
 }
 default['manifold']['manifold-api']['enable_jemalloc'] = true
-
 default['manifold']['manifold-api']['uploads_directory'] = "/var/opt/manifold/api/uploads"
 default['manifold']['manifold-api']['auto_migrate'] = true
 default['manifold']['manifold-api']['rake_cache_clear'] = true
-
 default['manifold']['manifold-api']['manifold_host'] = node['fqdn']
 default['manifold']['manifold-api']['manifold_https'] = false
 default['manifold']['manifold-api']['time_zone'] = nil
-default['manifold']['manifold-api']['manifold_email_from'] = nil
-default['manifold']['manifold-api']['manifold_email_display_name'] = nil
-default['manifold']['manifold-api']['manifold_email_subject_suffix'] = nil
-default['manifold']['manifold-api']['manifold_is_demo'] = true
 
 # You probably do not need to change any of the following settings.
 default['manifold']['manifold-api']['shared_path'] = "/var/opt/manifold/api/shared"
@@ -313,7 +309,11 @@ default['manifold']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10
 default['manifold']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['manifold']['nginx']['ssl_dhparam'] = nil # Path to dhparam.pem
 default['manifold']['nginx']['listen_addresses'] = ['*']
-default['manifold']['nginx']['listen_port'] = 3030 # override only if you have a reverse proxy
+if node[:platform] == "mac_os_x"
+  default['manifold']['nginx']['listen_port'] = 3030 # override only if you have a reverse proxy
+else
+  default['manifold']['nginx']['listen_port'] = 80 # override only if you have a reverse proxy
+end
 default['manifold']['nginx']['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP
 default['manifold']['nginx']['custom_manifold_server_config'] = nil
 default['manifold']['nginx']['custom_nginx_config'] = nil
