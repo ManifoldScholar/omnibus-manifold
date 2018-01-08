@@ -18,7 +18,6 @@ conflict  "manifold"
 install_dir "#{default_root}/#{name}"
 
 build_version Omnibus::BuildVersion.semver
-build_iteration 1
 
 # Creates required build directories
 dependency "preparation"

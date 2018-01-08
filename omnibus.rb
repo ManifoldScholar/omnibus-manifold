@@ -17,6 +17,8 @@
 if RbConfig::CONFIG['host_os'] =~ /darwin|mac os/
   base_dir './local'
 end
+
+append_timestamp false
 #
 # Alternatively you can tune the individual values
 # ------------------------------------------------
