@@ -25,6 +25,7 @@ manifold_api_static_etc_dir     = "/opt/manifold/etc/manifold/api"
 manifold_api_working_dir        = File.join(manifold_api_dir, "working")
 manifold_api_tmp_dir            = File.join(manifold_api_dir, "tmp")
 manifold_api_public_uploads_dir = node['manifold']['manifold-api']['uploads_directory']
+manifold_api_keys_directory     = node['manifold']['manifold-api']['keys_directory']
 manifold_api_log_dir            = node['manifold']['manifold-api']['log_directory']
 upgrade_status_dir             = File.join(manifold_api_dir, "upgrade-status")
 
@@ -70,7 +71,8 @@ end
   manifold_api_working_dir,
   manifold_api_tmp_dir,
   upgrade_status_dir,
-  manifold_api_log_dir
+  manifold_api_log_dir,
+  manifold_api_keys_directory
 ].compact.each do |dir_name|
   directory "create #{dir_name}" do
     path dir_name
@@ -132,7 +134,8 @@ end
 {
   "/opt/manifold/embedded/src/api/tmp" => manifold_api_tmp_dir,
   "/opt/manifold/embedded/src/api/public/system" => manifold_api_public_uploads_dir,
-  "/opt/manifold/embedded/src/api/log" => manifold_api_log_dir
+  "/opt/manifold/embedded/src/api/log" => manifold_api_log_dir,
+  "/opt/manifold/embedded/src/config/keys" => manifold_api_keys_directory,
 }.each do |link_dir, target_dir|
   link link_dir do
     to target_dir

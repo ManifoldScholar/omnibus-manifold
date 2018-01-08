@@ -38,7 +38,7 @@ build do
   # Because db/schema.rb can be modified after installation
   copy 'api/db/schema.rb', 'api/db/schema.rb.bundled'
 
-  sync "#{project_dir}/", "#{install_dir}/embedded/src/", exclude: ["api/tmp", "api/public/system", "api/log"]
+  sync "#{project_dir}/", "#{install_dir}/embedded/src/", exclude: ["api/tmp", "api/public/system", "api/log", "config/keys"]
 
   erb dest: "#{install_dir}/bin/manifold-rake",
       source: 'bundle_exec_wrapper.sh.erb',

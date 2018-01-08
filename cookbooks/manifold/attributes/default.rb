@@ -64,6 +64,7 @@ default['manifold']['manifold-api']['env'] = {
 }
 default['manifold']['manifold-api']['enable_jemalloc'] = true
 default['manifold']['manifold-api']['uploads_directory'] = "/var/opt/manifold/api/uploads"
+default['manifold']['manifold-api']['keys_directory'] = "/var/opt/manifold/api/keys"
 default['manifold']['manifold-api']['auto_migrate'] = true
 default['manifold']['manifold-api']['rake_cache_clear'] = true
 default['manifold']['manifold-api']['manifold_host'] = node['fqdn']
