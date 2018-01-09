@@ -17,7 +17,10 @@ conflict  "manifold"
 # and /opt/manifold on all other platforms
 install_dir "#{default_root}/#{name}"
 
-build_version Omnibus::BuildVersion.semver
+build_version do
+  source :git, from_dependency: 'manifold'
+end
+
 
 # Creates required build directories
 dependency "preparation"
