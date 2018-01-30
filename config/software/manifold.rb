@@ -1,11 +1,7 @@
 name "manifold"
 
-default_version 'v0.3.4'
-
-version 'v0.3.4' do
-  source github: 'ManifoldScholar/manifold'
-end
-
+default_version 'v0.3.3'
+source github: 'ManifoldScholar/manifold'
 license :project_license
 
 build do
