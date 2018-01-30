@@ -1,8 +1,4 @@
-#
-# Copyright 2017 YOUR NAME
-#
-# All Rights Reserved.
-#
+require_relative './../../util/clean_software.rb'
 
 name "manifold"
 maintainer "Zach Davis, Cast Iron Coding"
