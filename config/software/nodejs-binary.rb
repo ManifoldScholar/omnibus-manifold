@@ -24,11 +24,26 @@
 # easily removed with remove-nodejs.
 #
 name "nodejs-binary"
-default_version "6.10.3"
+default_version "8.10.0"
 
 license "MIT"
 license_file "LICENSE"
 skip_transitive_dependency_licensing true
+
+version "8.10.0" do
+  source_hash = if ppc64le?
+                  "f3daa7c32c5ea92176821b87e4f7653de6c181cca2d87904f6a1d3b25864d623"
+                elsif ppc64?
+                  "0cf3170dfd8cf489a8e17dfa525927ba927fe3022a1ef2c924affffce7c82691"
+                elsif s390x?
+                  "f225806b120564dadc9f1194d4360a311ffb374e3ffd0bcf6da0a9bfeeb670bc"
+                elsif osx?
+                  "7d77bd35bc781f02ba7383779da30bd529f21849b86f14d87e097497671b0271"
+                else
+                  "c1302439aee9791d70d3ab4194a612e6131d37fa0e3452072e847e212ed77867"
+                end
+  source sha256: source_hash
+end
 
 version "6.10.3" do
   source_hash = if ppc64le?
