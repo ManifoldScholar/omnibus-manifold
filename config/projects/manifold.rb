@@ -23,6 +23,7 @@ dependency "preparation"
 
 # manifold dependencies/components
 dependency "nodejs-binary"
+dependency "pandoc-binary"
 dependency "chef-gem"
 dependency "chef-zero"
 dependency "openssl"
