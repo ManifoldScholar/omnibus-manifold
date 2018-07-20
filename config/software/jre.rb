@@ -15,7 +15,7 @@
 #
 
 name "jre"
-default_version "8u161"
+default_version "8u181"
 
 unless _64_bit?
   raise "Server-jre can only be installed on x86_64 systems."
@@ -41,22 +41,22 @@ whitelist_file "jre/bin/appletviewer"
 license_warning = "By including the JRE, you accept the terms of the Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX, which can be found at http://www.oracle.com/technetwork/java/javase/terms/license/index.html"
 license_cookie = "gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"
 
-version "8u161" do
+version "8u181" do
   if mac_os_x?
     # https://www.oracle.com/webfolder/s/digest/8u121checksum.html
-    source url: "http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jre-8u152-macosx-x64.tar.gz",
-           sha256: "4f00316e9d69bfb5f44a4831c17e9e96350f3724dbc70d97f8eaf6fe9fee13ca",
+    source url: "http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jre-8u181-macosx-x64.tar.gz",
+           sha256: "7d2e6275f77bfa0f0eaca03c6d48e27fa822abcae056d30293007978957ce3fc",
            cookie: license_cookie,
            warning: license_warning,
            unsafe:  true
-    relative_path "jre1.8.0_152.jre/Contents/Home"
+    relative_path "jre1.8.0_181.jre/Contents/Home"
   else
-    source url: "http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jre-8u161-linux-x64.tar.gz",
-           sha256: "f5013ffab71cfb690de18d2b75a2d8c95e87175c888c50042be06b167ea6b4b5",
+    source url: "http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jre-8u181-linux-x64.tar.gz",
+           sha256: "0b26c7fcfad20029e6e0989e678efcd4a81f0fe502a478b4972215533867de1b",
            cookie: license_cookie,
            warning: license_warning,
            unsafe:  true
-    relative_path "jre1.8.0_161"
+    relative_path "jre1.8.0_181"
   end
 end
 

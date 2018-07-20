@@ -15,6 +15,8 @@ create_symlinks()
     ln -fs ${DEST_DIR}/bin/manifold-rake /usr/local/bin/manifold-rake || error_exit "Failed to create manifold-rake symlink in /usr/bin"
     ln -fs ${DEST_DIR}/bin/manifold-api /usr/local/bin/manifold-api || error_exit "Failed to create manifold-api symlink in /usr/bin"
     ln -fs ${DEST_DIR}/bin/manifold-psql /usr/local/bin/manifold-psql || error_exit "Failed to create manifold-psql symlink in /usr/bin"
+    ln -fs ${DEST_DIR}/bin/pandoc /usr/local/bin/pandoc || error_exit "Failed to create pandoc symlink in /usr/bin"
+    ln -fs ${DEST_DIR}/bin/pandoc-citeproc /usr/local/bin/pandoc-citeproc || error_exit "Failed to create pandoc-citeproc symlink in /usr/bin"
 }
 
 create_symlinks
