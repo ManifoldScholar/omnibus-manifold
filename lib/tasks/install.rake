@@ -1,32 +1,25 @@
 namespace :install do
-  desc 'Install the latest package'
   task :latest => :environment do
-    package = $project.latest_osx_package
-    path_to_pkg = package.relative_path_from($project.root)
-
-    unless package && path_to_pkg
-      fail 'No package found, did you build?'
-    end
-
-    cmd = "/usr/sbin/installer -pkg #{path_to_pkg} -target /"
-    exec cmd
-
+    fail "Deprecated, run one of the other install:* tasks"
   end
 
-  desc 'Install the latest debian package'
   task :in_vagrant => :environment do
-    package = $project.latest_debian_package
+    fail "Deprecated, run one of the other install:* tasks"
+  end
 
-    unless package
-      fail 'No package found, did you build?'
+  OmnibusInterface.project.each do |platform|
+    if platform.virtualized?
+      desc "Install the package for the #{platform.name} platform on a virtual machine"
+      task platform.name => :environment do
+        platform.install_is_running!
+
+        exec platform.remote_install_command
+      end
+    else
+      desc "Install the package for the #{platform.name} platform on this host"
+      task platform.name => :environment do
+        exec platform.install_command
+      end
     end
-
-    ssh_script = [
-        'cd omnibus-manifold',
-        "sudo dpkg -i #{package.relative_path_from($project.root)}",
-        "sudo manifold-ctl reconfigure"
-    ].join(' && ')
-
-    exec %[vagrant ssh -c #{Shellwords.shellescape(ssh_script)} install]
   end
 end

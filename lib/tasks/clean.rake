@@ -1,4 +1,4 @@
 desc 'Clean the local build directory'
 task :clean => :environment do
-  $project.clean!
+  OmnibusInterface.project.clean!
 end
