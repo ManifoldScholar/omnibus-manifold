@@ -19,7 +19,7 @@ version '7.0.6-9' do
   source sha256: '74e25977aa0ea8f0fc5ca1e994a649d3660b82634f534725e46cea618a098377'
 end
 
-source url: "https://s3-us-west-2.amazonaws.com/scryptmouse/im7-src/ImageMagick-#{version}.tar.gz"
+source url: "https://storage.googleapis.com/manifold-assets/omnibus/im7-src/ImageMagick-#{version}.tar.gz"
 
 relative_path "ImageMagick-#{version}"
 
@@ -31,9 +31,8 @@ build do
   #--disable-dependency-tracking
   # Build without C++ interface, graphviz, ghostscript, freetype, perl
   # Basically: nothing we won't need to resize images
-  config_args = [
-      "--prefix=#{install_dir}/embedded",
-  ].concat(%w[
+  config_args = %W[
+    --prefix=#{install_dir}/embedded
     --disable-silent-rules
     --enable-shared
     --enable-static
@@ -48,7 +47,7 @@ build do
     --without-gvc
     --without-gslib
     --without-freetype
-  ])
+  ]
 
   config_args.unshift("--disable-osx-universal-binary") if mac_os_x?
 

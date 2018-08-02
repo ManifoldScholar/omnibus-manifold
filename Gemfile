@@ -7,7 +7,12 @@ gem 'omnibus', '~> 5.6'
 # software definitions, but you can clone/fork Chef's to get you started.
 gem 'omnibus-software', github: 'opscode/omnibus-software'
 
+gem 'activesupport', '~> 5.2', require: false
+gem 'attr_lazy'
+gem 'cleanroom'
 gem 'rake'
+gem 'pry'
+gem 'ptools'
 
 # This development group is installed by default when you run `bundle install`,
 # but if you are using Omnibus in a CI-based infrastructure, you do not need

@@ -16,47 +16,86 @@ guest_project_path  = "/home/vagrant/#{File.basename(host_project_path)}"
 project_name        = 'manifold'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = 'bento/ubuntu-16.04'
-
   config.dns.tld = 'vagrant'
 
   config.vm.provider :virtualbox do |vb|
     vb.customize [
-                     "modifyvm", :id,
-                     "--memory", "3084",
-                     "--cpus",   "2"
-                 ]
+      "modifyvm", :id,
+      "--memory", "3084",
+      "--cpus",   "2"
+    ]
   end
 
-  config.vm.define "builder" do |builder|
+  config.vm.define 'ubuntu16-builder' do |builder|
+    builder.vm.box = 'bento/ubuntu-16.04'
     builder.dns.tld = 'vagrant'
-    builder.vm.hostname = "build.omnibus-#{project_name}"
+    builder.vm.hostname = "ubuntu-builder.omnibus-#{project_name}"
     builder.vm.provision :shell, path: 'lib/scripts/setup_install.sh'
     builder.vm.provision :chef_solo do |chef|
       chef.json = {
-          "omnibus" => {
-              "build_user"  => "vagrant",
-              "build_dir"   => guest_project_path,
-              "install_dir" => "/opt/#{project_name}"
-          }
+        "omnibus" => {
+          "build_user"  => "vagrant",
+          "build_dir"   => guest_project_path,
+          "install_dir" => "/opt/#{project_name}"
+        }
       }
 
       chef.run_list = [
-          "recipe[omnibus::default]"
+        "recipe[omnibus::default]"
       ]
     end
 
-    builder.vm.network :private_network, ip: '10.42.1.1'
+    builder.vm.network :private_network, ip: '10.42.1.2'
   end
 
-  config.vm.define "install" do |install|
+  config.vm.define 'ubuntu16-install' do |install|
+    install.vm.box = 'bento/ubuntu-16.04'
+
     install.dns.tld = 'vagrant'
 
     install.vm.hostname = "install.omnibus-#{project_name}.vagrant"
 
     install.vm.provision :shell, path: 'lib/scripts/setup_install.sh'
 
-    install.vm.network :private_network, ip: '10.42.2.2'
+    install.vm.network :private_network, ip: '10.42.1.3'
+  end
+
+  config.vm.define 'centos7-builder' do |builder|
+    builder.vm.box = 'bento/centos-7.5'
+
+    builder.dns.tld = 'vagrant'
+
+    builder.vm.hostname = "centos7-builder.omnibus-#{project_name}.vagrant"
+
+    builder.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
+
+    builder.vm.provision :chef_solo do |chef|
+      chef.json = {
+        "omnibus" => {
+          "build_user"  => "vagrant",
+          "build_dir"   => guest_project_path,
+          "install_dir" => "/opt/#{project_name}"
+        }
+      }
+
+      chef.run_list = [
+        "recipe[omnibus::default]"
+      ]
+    end
+
+    builder.vm.network :private_network, ip: '10.42.1.4'
+  end
+
+  config.vm.define 'centos7-install' do |install|
+    install.vm.box = 'bento/centos-7.5'
+
+    install.dns.tld = 'vagrant'
+
+    install.vm.hostname = "centos7-install.omnibus-#{project_name}.vagrant"
+
+    install.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
+
+    install.vm.network :private_network, ip: '10.42.1.5'
   end
 
   config.omnibus.chef_version = :latest
@@ -74,7 +113,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.ssh.timeout        = 120
   config.ssh.forward_agent  = true
 
-  config.vm.synced_folder host_project_path, guest_project_path, type: 'rsync', rsync__exclude: %w[.git/ local/]
+  config.vm.synced_folder host_project_path, guest_project_path
 
   config.vm.network :private_network, type: 'dhcp'
 end

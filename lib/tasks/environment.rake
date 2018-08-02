@@ -1,4 +1,3 @@
 task :environment do
-  require_relative '../omnibus_project'
-  $project = OmnibusProject.new('manifold')
+  # This task intentionally left blank
 end

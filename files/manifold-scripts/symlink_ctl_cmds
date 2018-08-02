@@ -3,20 +3,34 @@
 # Symlink the ctl commands
 DEST_DIR=${1:-/opt/manifold}
 
+if [ -s "/etc/redhat-release" ]; then
+	# RHEL uses /usr/local/sbin in the default root $PATH rather than /usr/local/bin
+	TARGET="/usr/local/sbin"
+else
+	TARGET="/usr/local/bin"
+
 error_exit()
 {
-    echo "${1:-"Unknown Error"}" 1>&2
-    exit 1
+	echo "${1:-"Unknown Error"}" 1>&2
+	exit 1
+}
+
+create_symlink() {
+	local source=${1?'Must provide a source'}
+	local basename="$(basename "${source}")"
+	local target="${TARGET}/${basename}"
+
+	ln -fs "$source" "$target" || error_exit "Failed to create ${basename} symlink in ${TARGET}"
 }
 
 create_symlinks()
 {
-    ln -fs ${DEST_DIR}/bin/manifold-ctl /usr/local/bin/manifold-ctl || error_exit "Failed to create manifold-ctl symlink in /usr/bin"
-    ln -fs ${DEST_DIR}/bin/manifold-rake /usr/local/bin/manifold-rake || error_exit "Failed to create manifold-rake symlink in /usr/bin"
-    ln -fs ${DEST_DIR}/bin/manifold-api /usr/local/bin/manifold-api || error_exit "Failed to create manifold-api symlink in /usr/bin"
-    ln -fs ${DEST_DIR}/bin/manifold-psql /usr/local/bin/manifold-psql || error_exit "Failed to create manifold-psql symlink in /usr/bin"
-    ln -fs ${DEST_DIR}/bin/pandoc /usr/local/bin/pandoc || error_exit "Failed to create pandoc symlink in /usr/bin"
-    ln -fs ${DEST_DIR}/bin/pandoc-citeproc /usr/local/bin/pandoc-citeproc || error_exit "Failed to create pandoc-citeproc symlink in /usr/bin"
+	create_symlink ${DEST_DIR}/bin/manifold-ctl
+	create_symlink ${DEST_DIR}/bin/manifold-rake
+	create_symlink ${DEST_DIR}/bin/manifold-api
+	create_symlink ${DEST_DIR}/bin/manifold-psql
+	create_symlink ${DEST_DIR}/bin/pandoc
+	create_symlink ${DEST_DIR}/bin/pandoc-citeproc
 }
 
 create_symlinks
