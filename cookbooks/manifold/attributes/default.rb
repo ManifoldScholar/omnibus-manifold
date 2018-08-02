@@ -63,6 +63,8 @@ default['manifold']['manifold-api']['env'] = {
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/usr/local/bin:/bin:/usr/bin",
 }
 default['manifold']['manifold-api']['enable_jemalloc'] = true
+# We don't actually want to expose this in the config.rb, but we configure it here with other shared paths.
+default['manifold']['manifold-api']['tus_directory'] = "/var/opt/manifold/api/data"
 default['manifold']['manifold-api']['uploads_directory'] = "/var/opt/manifold/api/uploads"
 default['manifold']['manifold-api']['keys_directory'] = "/var/opt/manifold/api/keys"
 default['manifold']['manifold-api']['auto_migrate'] = true
