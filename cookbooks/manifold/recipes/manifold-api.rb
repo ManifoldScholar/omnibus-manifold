@@ -24,6 +24,7 @@ manifold_api_etc_dir            = File.join(manifold_api_dir, "etc")
 manifold_api_static_etc_dir     = "/opt/manifold/etc/manifold/api"
 manifold_api_working_dir        = File.join(manifold_api_dir, "working")
 manifold_api_tmp_dir            = File.join(manifold_api_dir, "tmp")
+manifold_api_tus_data_dir       = node['manifold']['manifold-api']['tus_directory']
 manifold_api_public_uploads_dir = node['manifold']['manifold-api']['uploads_directory']
 manifold_api_keys_directory     = node['manifold']['manifold-api']['keys_directory']
 manifold_api_log_dir            = node['manifold']['manifold-api']['log_directory']
@@ -57,6 +58,7 @@ storage_directory node['manifold']['manifold-api']['shared_path'] do
 end
 
 [
+  manifold_api_tus_data_dir,
   manifold_api_public_uploads_dir,
 ].compact.each do |dir_name|
   storage_directory dir_name do
@@ -133,6 +135,7 @@ end
 # replace empty directories in the Git repo with symlinks to /var/opt/manifold
 {
   "/opt/manifold/embedded/src/api/tmp" => manifold_api_tmp_dir,
+  "/opt/manifold/embedded/src/api/data" => manifold_api_tus_data_dir,
   "/opt/manifold/embedded/src/api/public/system" => manifold_api_public_uploads_dir,
   "/opt/manifold/embedded/src/api/log" => manifold_api_log_dir,
   "/opt/manifold/embedded/src/config/keys" => manifold_api_keys_directory,
