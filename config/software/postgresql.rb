@@ -15,7 +15,7 @@
 #
 
 name "postgresql"
-default_version "9.6.3"
+default_version "9.6.9"
 
 license "PostgreSQL"
 license_file "COPYRIGHT"
@@ -44,6 +44,10 @@ end
 
 version "9.6.3" do
   source md5: "ce1d0a57ace0a5b7a994b56796fdba35"
+end
+
+version "9.6.9" do
+  source sha256: "b97952e3af02dc1e446f9c4188ff53021cc0eed7ed96f254ae6daf968c443e2e"
 end
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
