@@ -5,7 +5,7 @@ namespace :build do
       log_level: 'info'
     )
 
-    OmnibusInterface.project.build!(log_level: args[:log_level])
+    exec OmnibusInterface.project.build_command(log_level: args[:log_level])
   end
 
   OmnibusInterface.project.virtualized_platforms.each do |platform|

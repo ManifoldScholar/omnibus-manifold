@@ -30,7 +30,7 @@ module OmnibusInterface
     def packages
       raise "Must have provided a #package_glob for #{name}" unless package_glob.present?
 
-      env.packages_dir.children.select do |child|
+      env.packages_dir.find.select do |child|
         child.fnmatch package_glob
       end
     end
@@ -77,11 +77,15 @@ module OmnibusInterface
     def remote_build_command(log_level: 'info')
       raise "This cannot be run on non-virtualized platform" unless virtualized?
 
+      overrides = {
+        package_dir: File.join('/vagrant/pkg', name)
+      }
+
       build_ssh_script_command target: builder_vm do |s|
         s << "source ~/load-omnibus-toolchain.sh"
         s << "cd /vagrant"
         s << "bundle install -j 3 --binstubs"
-        s << "bin/rake build:package[#{log_level}]"
+        s << build_command(log_level: log_level, overrides: overrides)
       end
     end
 
@@ -101,6 +105,18 @@ module OmnibusInterface
     # @!endgroup
 
     # @!group Shell Commands
+
+    def build_command(log_level: 'info', overrides: {})
+      options = [
+        "--log-level #{log_level}"
+      ]
+
+      overrides.each_with_object(options) do |(key, value), opts|
+        opts << %[--override="#{key}:#{value}"]
+      end
+
+      %[bin/omnibus build #{project_name} #{options.join(' ')}]
+    end
 
     # @return [String]
     def install_command
@@ -125,6 +141,14 @@ module OmnibusInterface
       end
     end
 
+    def local_build_command(log_level: 'info')
+      overrides = {
+        package_dir: env.packages_dir.join(name)
+      }
+
+      build_command log_level: log_level, overrides: overrides
+    end
+
     # @!endgroup
 
     dsl do
@@ -147,7 +171,7 @@ module OmnibusInterface
       # @param [String] glob
       # @return [void]
       def package_glob(glob)
-        platform.package_glob = glob
+        platform.package_glob = restructure_relative glob
       end
 
       expose :package_glob
@@ -157,6 +181,16 @@ module OmnibusInterface
       end
 
       expose :virtualized!
+
+      private
+
+      def restructure_relative(glob)
+        glob = glob.to_s
+
+        return glob if glob.starts_with?(?*)
+
+        glob.starts_with?(?*) ? glob : "*/#{glob}"
+      end
     end
   end
 end

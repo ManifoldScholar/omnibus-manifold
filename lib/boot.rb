@@ -3,6 +3,7 @@ $: << __dir__
 require 'bundler/setup'
 require 'fileutils'
 require 'pathname'
+require 'find'
 
 require 'active_support/all'
 require 'attr_lazy'
@@ -18,17 +19,17 @@ require 'omnibus_interface'
 OmnibusInterface.configure do
   project 'manifold' do
     platform 'macos' do
-      package_glob '*.pkg'
+      package_glob 'macos/*.pkg'
     end
 
     platform 'ubuntu16' do
-      package_glob '*.deb'
+      package_glob 'ubuntu16/*.deb'
 
       virtualized!
     end
 
     platform 'centos7' do
-      package_glob '*.el7.x86_64.rpm'
+      package_glob 'centos7/*.el7.x86_64.rpm'
 
       virtualized!
     end

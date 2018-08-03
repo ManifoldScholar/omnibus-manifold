@@ -22,8 +22,12 @@ module OmnibusInterface
       end
     end
 
-    def build!(log_level: 'info')
-      sh "bin/omnibus build #{name} --log-level #{log_level}"
+    def build_command(log_level: 'info')
+      if current_platform?
+        current_platform.local_build_command(log_level: log_level)
+      else
+        %[bin/omnibus build #{name} --log-level #{log_level}]
+      end
     end
 
     def sync_cookbooks!
