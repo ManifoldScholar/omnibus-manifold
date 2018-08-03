@@ -30,7 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     builder.vm.box = 'bento/ubuntu-16.04'
     builder.dns.tld = 'vagrant'
     builder.vm.hostname = "ubuntu-builder.omnibus-#{project_name}"
-    builder.vm.provision :shell, path: 'lib/scripts/setup_install.sh'
+    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
     builder.vm.provision :chef_solo do |chef|
       chef.json = {
         "omnibus" => {
@@ -55,7 +55,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     install.vm.hostname = "install.omnibus-#{project_name}.vagrant"
 
-    install.vm.provision :shell, path: 'lib/scripts/setup_install.sh'
+    install.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
 
     install.vm.network :private_network, ip: '10.42.1.3'
   end
