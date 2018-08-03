@@ -18,8 +18,8 @@ namespace :reconfigure do
   desc 'Sync cookbooks in install vm and run reconfigure'
   task :in_vagrant, :log_level do |_t, args|
     ssh_script = [
-      'cd omnibus-manifold',
-      'sudo rsync -avzh /home/vagrant/omnibus-manifold/cookbooks/ /opt/manifold/embedded/cookbooks/',
+      'cd /vagrant',
+      'sudo rsync -avzh /vagrant/cookbooks/ /opt/manifold/embedded/cookbooks/',
       "sudo manifold-ctl reconfigure"
     ].join(' && ')
     exec %[vagrant ssh -c #{Shellwords.shellescape(ssh_script)} install]

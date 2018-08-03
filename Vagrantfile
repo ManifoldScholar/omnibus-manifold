@@ -16,7 +16,7 @@ end
 VAGRANTFILE_API_VERSION = ?2
 
 host_project_path   = File.expand_path('..', __FILE__)
-guest_project_path  = "/home/vagrant/#{File.basename(host_project_path)}"
+guest_project_path  = "/vagrant"
 project_name        = 'manifold'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -116,8 +116,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.ssh.max_tries      = 40
   # config.ssh.timeout        = 120
   config.ssh.forward_agent  = true
-
-  config.vm.synced_folder host_project_path, guest_project_path
 
   config.vm.network :private_network, type: 'dhcp'
 end

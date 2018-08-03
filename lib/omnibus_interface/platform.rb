@@ -79,7 +79,7 @@ module OmnibusInterface
 
       build_ssh_script_command target: builder_vm do |s|
         s << "source ~/load-omnibus-toolchain.sh"
-        s << "cd ~/omnibus-manifold"
+        s << "cd /vagrant"
         s << "bundle install -j 3 --binstubs"
         s << "bin/rake build:package[#{log_level}]"
       end
@@ -92,7 +92,7 @@ module OmnibusInterface
       relative_package = package.relative_path_from root
 
       build_ssh_script_command target: install_vm do |s|
-        s << "cd omnibus-manifold"
+        s << "cd /vagrant"
         s << install_package_command(relative_package)
         s << "sudo manifold-ctl reconfigure"
       end
