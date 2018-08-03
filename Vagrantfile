@@ -29,7 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define 'ubuntu16-builder' do |builder|
     builder.vm.box = 'bento/ubuntu-16.04'
     builder.dns.tld = 'vagrant'
-    builder.vm.hostname = "ubuntu-builder.omnibus-#{project_name}"
+    builder.vm.hostname = "ubuntu16-builder.omnibus-#{project_name}"
     builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
     builder.vm.provision :chef_solo do |chef|
       chef.json = {
@@ -53,7 +53,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     install.dns.tld = 'vagrant'
 
-    install.vm.hostname = "install.omnibus-#{project_name}.vagrant"
+    install.vm.hostname = "ubuntu16-install.omnibus-#{project_name}"
 
     install.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
 
@@ -65,7 +65,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     builder.dns.tld = 'vagrant'
 
-    builder.vm.hostname = "centos7-builder.omnibus-#{project_name}.vagrant"
+    builder.vm.hostname = "centos7-builder.omnibus-#{project_name}"
 
     builder.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
 
@@ -91,7 +91,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     install.dns.tld = 'vagrant'
 
-    install.vm.hostname = "centos7-install.omnibus-#{project_name}.vagrant"
+    install.vm.hostname = "centos7-install.omnibus-#{project_name}"
 
     install.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
 
