@@ -13,6 +13,12 @@ if Vagrant::VERSION < '2.0.0'
   raise "omnibus-manifold requires Vagrant 2.0.0+"
 end
 
+VIRTUALBOX_VERSION = %x[vboxmanage --version].to_s.strip[/\A(\d+\.\d+\.\d+)/, 1]
+
+if VIRTUALBOX_VERSION < '5.2.0'
+  raise "omnibus-manifold requires Virtualbox 5.2+ to build ubuntu 18 remotely"
+end
+
 VAGRANTFILE_API_VERSION = ?2
 
 host_project_path   = File.expand_path('..', __FILE__)
