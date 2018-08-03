@@ -102,6 +102,22 @@ module OmnibusInterface
       end
     end
 
+    def remote_sync_then_reconfigure_command
+      ssh_script = [
+        'cd /vagrant',
+        'sudo rsync -avzh /vagrant/cookbooks/ /opt/manifold/embedded/cookbooks/',
+        'sudo manifold-ctl reconfigure'
+      ].join(' && ')
+
+      %[vagrant ssh -c #{Shellwords.shellescape(ssh_script)} install]
+
+      build_ssh_script_command target: install_vm do |s|
+        s << 'cd /vagrant'
+        s << sync_cookbooks_command
+        s << reconfigure_command
+      end
+    end
+
     # @!endgroup
 
     # @!group Shell Commands
@@ -147,6 +163,30 @@ module OmnibusInterface
       }
 
       build_command log_level: log_level, overrides: overrides
+    end
+
+    def reconfigure_command
+      %[sudo manifold-ctl reconfigure]
+    end
+
+    def sync_cookbooks_command
+      conditionally_sudo %[rsync -a ./cookbooks #{env.cookbook_dir}], if_test: %[-w #{env.cookbook_dir}]
+    end
+
+    def sync_then_reconfigure_command
+      [
+        sync_cookbooks_command,
+        reconfigure_command
+      ] * " && "
+    end
+
+    def conditionally_sudo(command, if_test:)
+      [].tap do |s|
+        s << "if [ #{if_test} ]"
+        s << "then #{command}"
+        s << "else sudo #{command}"
+        s << "fi"
+      end * "; "
     end
 
     # @!endgroup

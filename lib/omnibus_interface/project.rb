@@ -9,6 +9,8 @@ module OmnibusInterface
 
     attr_reader :name
 
+    delegate :reconfigure_command, :sync_cookbooks_command, :sync_then_reconfigure_command, to: :current_platform!
+
     def initialize(name)
       @name      = name
       @platforms = ThreadSafe::Cache.new
@@ -30,10 +32,6 @@ module OmnibusInterface
       end
     end
 
-    def sync_cookbooks!
-      sh "rsync -av cookbooks/ #{env.cookbook_dir}"
-    end
-
     def clean!
       env.clean_dirs.each do |directory|
         warn "CLEANING #{directory}"
@@ -51,6 +49,12 @@ module OmnibusInterface
 
     attr_lazy_reader :current_platform do
       self[env.platform] if detected_platform?
+    end
+
+    def current_platform!
+      raise "Platform not able to be detected, cannot run" unless current_platform?
+
+      current_platform
     end
 
     def current_platform?
@@ -71,6 +75,25 @@ module OmnibusInterface
 
     def virtualized_platforms
       platforms.select(&:virtualized?)
+    end
+
+    def virtualized_deprecation_message(namespace:)
+      tasks = virtualized_platforms.map do |platform|
+        task_name = block_given? ? yield(platform) : platform.name
+
+        "#{namespace}:#{task_name}"
+      end
+
+      [].tap do |m|
+        m << '' << ''
+        m << "Deprecated, run one of:"
+
+        tasks.each do |task|
+          m << "\tbin/rake #{task}"
+        end
+
+        m << '' << '' << ''
+      end.join("\n")
     end
 
     # @!endgroup

@@ -22,7 +22,7 @@ namespace :build do
   end
 
   task :in_vagrant, [:log_level] => :environment do |_t, args|
-    fail "\n\n\nDeprecated, run build:ubuntu16 or build:centos7\n\n\n"
+    fail OmnibusInterface.project.virtualized_deprecation_message(namespace: :build)
   end
 end
 
