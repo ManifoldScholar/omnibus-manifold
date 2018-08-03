@@ -8,6 +8,7 @@ if [ -s "/etc/redhat-release" ]; then
 	TARGET="/usr/local/sbin"
 else
 	TARGET="/usr/local/bin"
+fi
 
 error_exit()
 {
