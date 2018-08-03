@@ -9,6 +9,10 @@ if Vagrant::VERSION < '1.2.1'
   raise "The Omnibus Build Lab is only compatible with Vagrant 1.2.1+"
 end
 
+if Vagrant::VERSION < '2.0.0'
+  raise "omnibus-manifold requires Vagrant 2.0.0+"
+end
+
 VAGRANTFILE_API_VERSION = ?2
 
 host_project_path   = File.expand_path('..', __FILE__)
