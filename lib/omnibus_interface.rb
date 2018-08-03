@@ -23,6 +23,8 @@ module OmnibusInterface
   class << self
     delegate :vagrant, to: :env
 
+    delegate :current_platform, to: :project
+
     def project
       project_instance.presence or raise "Must initialize the project"
     end

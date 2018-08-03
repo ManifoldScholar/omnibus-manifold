@@ -21,5 +21,59 @@ module OmnibusInterface
 
       @vagrant = OmnibusInterface::Vagrant.new
     end
+
+    attr_lazy_reader :platform do
+      if ubuntu16?
+        :ubuntu16
+      elsif centos7?
+        :centos7
+      elsif macos?
+        :macos
+      end
+    end
+
+    def centos?
+      ohai_platform == 'centos'
+    end
+
+    def centos7?
+      centos? && ohai_platform_version.start_with?('7.')
+    end
+
+    def macos?
+      ohai_platform == 'mac_os_x'
+    end
+
+    def ubuntu?
+      ohai_platform == 'ubuntu'
+    end
+
+    def ubuntu16?
+      ubuntu? && ohai_platform_version == '16.04'
+    end
+
+    # @!group Ohai methods
+
+    attr_lazy_reader :ohai do
+      build_ohai
+    end
+
+    attr_lazy_reader :ohai_platform do
+      ohai[:platform]
+    end
+
+    attr_lazy_reader :ohai_platform_version do
+      ohai[:platform_version]
+    end
+
+    # @!endgroup
+
+    private
+
+    def build_ohai
+      Ohai::System.new.tap do |system|
+        system.all_plugins
+      end
+    end
   end
 end

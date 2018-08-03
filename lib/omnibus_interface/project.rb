@@ -37,10 +37,20 @@ module OmnibusInterface
       end
     end
 
+    # @!group Platforms
+
     def [](platform_name)
       @platforms.fetch(platform_name.to_s)
     rescue KeyError
       raise "Unknown platform: #{platform_name.inspect}"
+    end
+
+    attr_lazy_reader :current_platform do
+      self[env.platform] if detected_platform?
+    end
+
+    def current_platform?
+      current_platform.present?
     end
 
     # @param [String] platform_name
@@ -59,6 +69,8 @@ module OmnibusInterface
       platforms.select(&:virtualized?)
     end
 
+    # @!endgroup
+
     alias_method :to_s, :name
 
     dsl do
@@ -70,7 +82,5 @@ module OmnibusInterface
 
       expose :platform
     end
-
-    private
   end
 end

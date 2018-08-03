@@ -7,14 +7,17 @@ require 'pathname'
 require 'active_support/all'
 require 'attr_lazy'
 require 'cleanroom'
+require 'ohai'
 require 'pry'
 require 'ptools'
+
+Ohai.config[:log_level] = :error
 
 require 'omnibus_interface'
 
 OmnibusInterface.configure do
   project 'manifold' do
-    platform 'osx' do
+    platform 'macos' do
       package_glob '*.pkg'
     end
 
