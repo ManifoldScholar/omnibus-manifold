@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Install omnibus
-gem 'omnibus', '~> 5.6'
+gem 'omnibus', '~> 5.6.8'
 
 # Use Chef's software definitions. It is recommended that you write your own
 # software definitions, but you can clone/fork Chef's to get you started.
@@ -11,6 +11,7 @@ gem 'activesupport', '~> 5.2', require: false
 gem 'attr_lazy'
 gem 'cleanroom'
 gem 'rake'
+gem 'rb-readline'
 gem 'pry'
 gem 'ptools'
 
