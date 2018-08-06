@@ -1,10 +1,10 @@
 namespace :install do
   task :latest => :environment do
-    fail "Deprecated, run one of the other install:* tasks"
+    fail OmnibusInterface.project.virtualized_deprecation_message(namespace: :install)
   end
 
   task :in_vagrant => :environment do
-    fail "Deprecated, run one of the other install:* tasks"
+    fail OmnibusInterface.project.virtualized_deprecation_message(namespace: :install)
   end
 
   OmnibusInterface.project.each do |platform|

@@ -9,6 +9,8 @@ module OmnibusInterface
 
     attr_reader :name
 
+    delegate :reconfigure_command, :sync_cookbooks_command, :sync_then_reconfigure_command, to: :current_platform!
+
     def initialize(name)
       @name      = name
       @platforms = ThreadSafe::Cache.new
@@ -22,12 +24,12 @@ module OmnibusInterface
       end
     end
 
-    def build!(log_level: 'info')
-      sh "bin/omnibus build #{name} --log-level #{log_level}"
-    end
-
-    def sync_cookbooks!
-      sh "rsync -av cookbooks/ #{env.cookbook_dir}"
+    def build_command(log_level: 'info')
+      if current_platform?
+        current_platform.local_build_command(log_level: log_level)
+      else
+        %[bin/omnibus build #{name} --log-level #{log_level}]
+      end
     end
 
     def clean!
@@ -37,10 +39,26 @@ module OmnibusInterface
       end
     end
 
+    # @!group Platforms
+
     def [](platform_name)
       @platforms.fetch(platform_name.to_s)
     rescue KeyError
       raise "Unknown platform: #{platform_name.inspect}"
+    end
+
+    attr_lazy_reader :current_platform do
+      self[env.platform] if detected_platform?
+    end
+
+    def current_platform!
+      raise "Platform not able to be detected, cannot run" unless current_platform?
+
+      current_platform
+    end
+
+    def current_platform?
+      current_platform.present?
     end
 
     # @param [String] platform_name
@@ -59,6 +77,27 @@ module OmnibusInterface
       platforms.select(&:virtualized?)
     end
 
+    def virtualized_deprecation_message(namespace:)
+      tasks = virtualized_platforms.map do |platform|
+        task_name = block_given? ? yield(platform) : platform.name
+
+        "#{namespace}:#{task_name}"
+      end
+
+      [].tap do |m|
+        m << '' << ''
+        m << "Deprecated, run one of:"
+
+        tasks.each do |task|
+          m << "\tbin/rake #{task}"
+        end
+
+        m << '' << '' << ''
+      end.join("\n")
+    end
+
+    # @!endgroup
+
     alias_method :to_s, :name
 
     dsl do
@@ -70,7 +109,5 @@ module OmnibusInterface
 
       expose :platform
     end
-
-    private
   end
 end

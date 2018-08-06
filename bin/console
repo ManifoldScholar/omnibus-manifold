@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+
+require_relative '../lib/boot'
+
+require 'omnibus'
+
+Pry.config.prompt_name = "omnibus-manifold"
+
+Pry.start

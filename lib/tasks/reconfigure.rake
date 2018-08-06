@@ -1,33 +1,26 @@
 namespace :reconfigure do
-  task :sync_cookbooks, [:log_level] => :environment do |_t, args|
-    args.with_defaults(
-      log_level: 'info'
-    )
-
-    OmnibusInterface.project.sync_cookbooks!
+  task :sync_cookbooks => :environment do
+    exec OmnibusInterface.project.sync_cookbooks_command
   end
 
-  task :reconfigure, [:log_level] => :environment do |_t, args|
-    args.with_defaults(
-      log_level: 'info'
-    )
-
-    exec %[cd #{OmnibusInterface.project.install_dir} && manifold-ctl reconfigure]
+  task :reconfigure => :environment do
+    exec OmnibusInterface.project.reconfigure_command
   end
 
   desc 'Sync cookbooks in install vm and run reconfigure'
-  task :in_vagrant, :log_level do |_t, args|
-    ssh_script = [
-      'cd omnibus-manifold',
-      'sudo rsync -avzh /home/vagrant/omnibus-manifold/cookbooks/ /opt/manifold/embedded/cookbooks/',
-      "sudo manifold-ctl reconfigure"
-    ].join(' && ')
-    exec %[vagrant ssh -c #{Shellwords.shellescape(ssh_script)} install]
+  task :in_vagrant do
+    fail OmnibusInterface.project.virtualized_deprecation_message(namespace: 'reconfigure')
+  end
+
+  OmnibusInterface.project.virtualized_platforms.each do |platform|
+    desc "Sync cookbooks for #{platform.name} and then reconfigure Manifold"
+    task platform.name => :environment do
+      exec platform.remote_sync_then_reconfigure_command
+    end
   end
 end
 
 desc 'Sync cookbook and run reconfigure'
-task :reconfigure, :log_level do |_t, args|
-  Rake::Task['reconfigure:sync_cookbooks'].invoke(args[:log_level])
-  exec "sudo rake reconfigure:reconfigure"
+task :reconfigure => %i[reconfigure:sync_cookbooks reconfigure:reconfigure] do |_t, args|
+  # noop
 end

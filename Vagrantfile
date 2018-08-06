@@ -9,10 +9,20 @@ if Vagrant::VERSION < '1.2.1'
   raise "The Omnibus Build Lab is only compatible with Vagrant 1.2.1+"
 end
 
+if Vagrant::VERSION < '2.0.0'
+  raise "omnibus-manifold requires Vagrant 2.0.0+"
+end
+
+VIRTUALBOX_VERSION = %x[vboxmanage --version].to_s.strip[/\A(\d+\.\d+\.\d+)/, 1]
+
+if VIRTUALBOX_VERSION < '5.2.0'
+  raise "omnibus-manifold requires Virtualbox 5.2+ to build ubuntu 18 remotely"
+end
+
 VAGRANTFILE_API_VERSION = ?2
 
 host_project_path   = File.expand_path('..', __FILE__)
-guest_project_path  = "/home/vagrant/#{File.basename(host_project_path)}"
+guest_project_path  = "/vagrant"
 project_name        = 'manifold'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -22,15 +32,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize [
       "modifyvm", :id,
       "--memory", "3084",
-      "--cpus",   "2"
+      "--cpus",   "2",
+      "--cableconnected0", "on",
+      "--cableconnected1", "on",
     ]
   end
 
   config.vm.define 'ubuntu16-builder' do |builder|
     builder.vm.box = 'bento/ubuntu-16.04'
     builder.dns.tld = 'vagrant'
-    builder.vm.hostname = "ubuntu-builder.omnibus-#{project_name}"
-    builder.vm.provision :shell, path: 'lib/scripts/setup_install.sh'
+    builder.vm.hostname = "ubuntu16-builder.omnibus-#{project_name}"
     builder.vm.provision :chef_solo do |chef|
       chef.json = {
         "omnibus" => {
@@ -44,6 +55,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "recipe[omnibus::default]"
       ]
     end
+
+    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
 
     builder.vm.network :private_network, ip: '10.42.1.2'
   end
@@ -53,9 +66,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     install.dns.tld = 'vagrant'
 
-    install.vm.hostname = "install.omnibus-#{project_name}.vagrant"
+    install.vm.hostname = "ubuntu16-install.omnibus-#{project_name}"
 
-    install.vm.provision :shell, path: 'lib/scripts/setup_install.sh'
+    install.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
 
     install.vm.network :private_network, ip: '10.42.1.3'
   end
@@ -65,9 +78,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     builder.dns.tld = 'vagrant'
 
-    builder.vm.hostname = "centos7-builder.omnibus-#{project_name}.vagrant"
-
-    builder.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
+    builder.vm.hostname = "centos7-builder.omnibus-#{project_name}"
 
     builder.vm.provision :chef_solo do |chef|
       chef.json = {
@@ -83,6 +94,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ]
     end
 
+    builder.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
+
     builder.vm.network :private_network, ip: '10.42.1.4'
   end
 
@@ -91,11 +104,49 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     install.dns.tld = 'vagrant'
 
-    install.vm.hostname = "centos7-install.omnibus-#{project_name}.vagrant"
+    install.vm.hostname = "centos7-install.omnibus-#{project_name}"
 
     install.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
 
     install.vm.network :private_network, ip: '10.42.1.5'
+  end
+
+  config.vm.define 'ubuntu18-builder' do |builder|
+    builder.vm.box = 'bento/ubuntu-18.04'
+
+    builder.dns.tld = 'vagrant'
+
+    builder.vm.hostname = "ubuntu18-builder.omnibus-#{project_name}"
+
+    builder.vm.provision :chef_solo do |chef|
+      chef.json = {
+        "omnibus" => {
+          "build_user"  => "vagrant",
+          "build_dir"   => guest_project_path,
+          "install_dir" => "/opt/#{project_name}"
+        }
+      }
+
+      chef.run_list = [
+        "recipe[omnibus::default]"
+      ]
+    end
+
+    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-18.sh'
+
+    builder.vm.network :private_network, ip: '10.42.1.6'
+  end
+
+  config.vm.define 'ubuntu18-install' do |install|
+    install.vm.box = 'bento/ubuntu-18.04'
+
+    install.dns.tld = 'vagrant'
+
+    install.vm.hostname = "ubuntu18-install.omnibus-#{project_name}"
+
+    install.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-18.sh'
+
+    install.vm.network :private_network, ip: '10.42.1.7'
   end
 
   config.omnibus.chef_version = :latest
@@ -112,8 +163,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.ssh.max_tries      = 40
   # config.ssh.timeout        = 120
   config.ssh.forward_agent  = true
-
-  config.vm.synced_folder host_project_path, guest_project_path
 
   config.vm.network :private_network, type: 'dhcp'
 end

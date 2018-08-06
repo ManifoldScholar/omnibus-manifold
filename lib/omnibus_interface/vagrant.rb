@@ -2,11 +2,6 @@ module OmnibusInterface
   class Vagrant
     def initialize
       @running_as_host = detect_host
-      @states = {}.with_indifferent_access
-
-      if host?
-        parse_status!
-      end
     end
 
     def host?
@@ -17,22 +12,20 @@ module OmnibusInterface
       target_in_state?(target, 'running', &block)
     end
 
-    def states
-      host_only!
-
-      @states.freeze
+    attr_lazy_reader :states do
+      parse_status!.freeze
     end
 
     def status(target)
       host_only!
 
-      @states[target]
+      states[target]
     end
 
     def target?(target)
       host_only!
 
-      @states.key? target
+      states.key? target
     end
 
     def target_in_state?(target, desired_state)
@@ -98,9 +91,11 @@ module OmnibusInterface
     end
 
     def parse_status!
+      return {} unless host?
+
       lines = parse_response %x[vagrant status --machine-readable]
 
-      lines.select(&:target_state?).each_with_object(@states) do |line, states|
+      lines.select(&:target_state?).each_with_object({}.with_indifferent_access) do |line, states|
         states[line.target] = line.data
       end
     end

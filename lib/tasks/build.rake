@@ -5,7 +5,7 @@ namespace :build do
       log_level: 'info'
     )
 
-    OmnibusInterface.project.build!(log_level: args[:log_level])
+    exec OmnibusInterface.project.build_command(log_level: args[:log_level])
   end
 
   OmnibusInterface.project.virtualized_platforms.each do |platform|
@@ -22,7 +22,7 @@ namespace :build do
   end
 
   task :in_vagrant, [:log_level] => :environment do |_t, args|
-    fail "\n\n\nDeprecated, run build:ubuntu16 or build:centos7\n\n\n"
+    fail OmnibusInterface.project.virtualized_deprecation_message(namespace: :build)
   end
 end
 
