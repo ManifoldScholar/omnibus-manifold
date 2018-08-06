@@ -25,6 +25,8 @@ module OmnibusInterface
     attr_lazy_reader :platform do
       if ubuntu16?
         :ubuntu16
+      elsif ubuntu18?
+        :ubuntu18
       elsif centos7?
         :centos7
       elsif macos?
@@ -52,6 +54,10 @@ module OmnibusInterface
       ubuntu? && ohai_platform_version == '16.04'
     end
 
+    def ubuntu18?
+      ubuntu? && ohai_platform_version == '18.04'
+    end
+
     # @!group Ohai methods
 
     attr_lazy_reader :ohai do
@@ -64,6 +70,14 @@ module OmnibusInterface
 
     attr_lazy_reader :ohai_platform_version do
       ohai[:platform_version]
+    end
+
+    # @!endgroup
+
+    # @!group Executables / Scripts
+
+    def is_old_tar(tar_path)
+      "#{root.join('bin', 'is_old_tar')} #{tar_path}"
     end
 
     # @!endgroup

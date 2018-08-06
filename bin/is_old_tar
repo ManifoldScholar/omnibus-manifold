@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+MINIMUM_TAR_VERSION = '1.29'
+
+tar_path = ARGV.fetch 0 do
+  fail "Usage: #{$0} /path/to/tar"
+end
+
+if File.executable?(tar_path)
+  version = %x[#{tar_path} --version].to_s.split("\n").first[/(\d+\.\d+)\z/, 1] rescue nil
+
+  if version && version < MINIMUM_TAR_VERSION
+    warn "#{tar_path} is old version: #{version}"
+
+    exit 0
+  end
+end
+
+exit 1

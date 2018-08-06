@@ -3,6 +3,12 @@ module OmnibusInterface
     include OmnibusInterface::Configurable
     include OmnibusInterface::HasEnvironment
 
+    OMNIBUS_TOOLCHAIN_TAR_PATHS = %w[
+      /opt/omnibus-toolchain/bin/tar
+      /opt/omnibus-toolchain/bin/gtar
+      /opt/omnibus-toolchain/embedded/bin/tar
+    ].freeze
+
     attr_reader :name
 
     attr_reader :project
@@ -48,6 +54,14 @@ module OmnibusInterface
     end
 
     attr_accessor :package_glob
+
+    def uses_system_tar=(new_value)
+      @uses_system_tar = new_value.present?
+    end
+
+    def uses_system_tar?
+      @uses_system_tar.present?
+    end
 
     def virtualized=(new_value)
       @virtualized = new_value.present?
@@ -103,14 +117,6 @@ module OmnibusInterface
     end
 
     def remote_sync_then_reconfigure_command
-      ssh_script = [
-        'cd /vagrant',
-        'sudo rsync -avzh /vagrant/cookbooks/ /opt/manifold/embedded/cookbooks/',
-        'sudo manifold-ctl reconfigure'
-      ].join(' && ')
-
-      %[vagrant ssh -c #{Shellwords.shellescape(ssh_script)} install]
-
       build_ssh_script_command target: install_vm do |s|
         s << 'cd /vagrant'
         s << sync_cookbooks_command
@@ -131,7 +137,11 @@ module OmnibusInterface
         opts << %[--override="#{key}:#{value}"]
       end
 
-      %[bin/omnibus build #{project_name} #{options.join(' ')}]
+      subshell do |s|
+        s << remove_omnibus_toolchain_tar_command if uses_system_tar?
+
+        s << %[bin/omnibus build #{project_name} #{options.join(' ')}]
+      end
     end
 
     # @return [String]
@@ -169,6 +179,24 @@ module OmnibusInterface
       %[sudo manifold-ctl reconfigure]
     end
 
+    def remove_omnibus_toolchain_tar_command
+      check_tar_paths = OMNIBUS_TOOLCHAIN_TAR_PATHS.map do |tar_path|
+        rm_command = conditionally_sudo %[rm -v #{tar_path}], if_test: %[-w #{tar_path}]
+
+        [].tap do |s|
+          s << %[if #{env.is_old_tar(tar_path)}]
+          s << %[then #{rm_command}]
+          s << %[fi]
+        end.join('; ')
+      end
+
+      subshell do |shell|
+        shell << %[echo "Checking omnibus-toolchain tar executables for old versions..." >&2]
+
+        shell.concat check_tar_paths
+      end
+    end
+
     def sync_cookbooks_command
       conditionally_sudo %[rsync -a ./cookbooks #{env.cookbook_dir}], if_test: %[-w #{env.cookbook_dir}]
     end
@@ -187,6 +215,14 @@ module OmnibusInterface
         s << "else sudo #{command}"
         s << "fi"
       end * "; "
+    end
+
+    def subshell
+      commands = [].tap do |script|
+        yield script if block_given?
+      end * " && "
+
+      %[(#{commands})]
     end
 
     # @!endgroup
@@ -215,6 +251,12 @@ module OmnibusInterface
       end
 
       expose :package_glob
+
+      def uses_system_tar!
+        platform.uses_system_tar = true
+      end
+
+      expose :uses_system_tar!
 
       def virtualized!
         platform.virtualized = true

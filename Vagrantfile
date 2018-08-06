@@ -32,7 +32,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize [
       "modifyvm", :id,
       "--memory", "3084",
-      "--cpus",   "2"
+      "--cpus",   "2",
+      "--cableconnected0", "on",
+      "--cableconnected1", "on",
     ]
   end
 
@@ -40,7 +42,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     builder.vm.box = 'bento/ubuntu-16.04'
     builder.dns.tld = 'vagrant'
     builder.vm.hostname = "ubuntu16-builder.omnibus-#{project_name}"
-    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
     builder.vm.provision :chef_solo do |chef|
       chef.json = {
         "omnibus" => {
@@ -54,6 +55,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "recipe[omnibus::default]"
       ]
     end
+
+    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
 
     builder.vm.network :private_network, ip: '10.42.1.2'
   end
@@ -77,7 +80,43 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     builder.vm.hostname = "centos7-builder.omnibus-#{project_name}"
 
+    builder.vm.provision :chef_solo do |chef|
+      chef.json = {
+        "omnibus" => {
+          "build_user"  => "vagrant",
+          "build_dir"   => guest_project_path,
+          "install_dir" => "/opt/#{project_name}"
+        }
+      }
+
+      chef.run_list = [
+        "recipe[omnibus::default]"
+      ]
+    end
+
     builder.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
+
+    builder.vm.network :private_network, ip: '10.42.1.4'
+  end
+
+  config.vm.define 'centos7-install' do |install|
+    install.vm.box = 'bento/centos-7.5'
+
+    install.dns.tld = 'vagrant'
+
+    install.vm.hostname = "centos7-install.omnibus-#{project_name}"
+
+    install.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
+
+    install.vm.network :private_network, ip: '10.42.1.5'
+  end
+
+  config.vm.define 'ubuntu18-builder' do |builder|
+    builder.vm.box = 'bento/ubuntu-18.04'
+
+    builder.dns.tld = 'vagrant'
+
+    builder.vm.hostname = "ubuntu18-builder.omnibus-#{project_name}"
 
     builder.vm.provision :chef_solo do |chef|
       chef.json = {
@@ -93,19 +132,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ]
     end
 
-    builder.vm.network :private_network, ip: '10.42.1.4'
+    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-18.sh'
+
+    builder.vm.network :private_network, ip: '10.42.1.6'
   end
 
-  config.vm.define 'centos7-install' do |install|
-    install.vm.box = 'bento/centos-7.5'
+  config.vm.define 'ubuntu18-install' do |install|
+    install.vm.box = 'bento/ubuntu-18.04'
 
     install.dns.tld = 'vagrant'
 
-    install.vm.hostname = "centos7-install.omnibus-#{project_name}"
+    install.vm.hostname = "ubuntu18-install.omnibus-#{project_name}"
 
-    install.vm.provision :shell, path: 'lib/scripts/provision-centos-75.sh'
+    install.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-18.sh'
 
-    install.vm.network :private_network, ip: '10.42.1.5'
+    install.vm.network :private_network, ip: '10.42.1.7'
   end
 
   config.omnibus.chef_version = :latest
