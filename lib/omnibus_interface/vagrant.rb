@@ -2,6 +2,7 @@ module OmnibusInterface
   class Vagrant
     def initialize
       @running_as_host = detect_host
+      @virtualized = detect_virtualized
     end
 
     def host?
@@ -79,11 +80,11 @@ module OmnibusInterface
     private
 
     def detect_host
-      return false if File.directory? '/vagrant'
+      File.which('vagrant').present?
+    end
 
-      return true if File.which('vagrant').present?
-
-      raise "Could not detect if we are running in a vagrant host or on vagrant"
+    def detect_virtualized
+      File.directory? '/vagrant'
     end
 
     def host_only!
