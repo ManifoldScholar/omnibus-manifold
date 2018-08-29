@@ -8,10 +8,9 @@ dependency "zlib"
 dependency "openssl"
 
 version "1.0.6" do
-  source md5: "00b516f4704d4a7cb50a1d97e6e8e15b"
+  source url: "https://storage.googleapis.com/manifold-assets/omnibus/bzip2/bzip2_1.0.6.orig.tar.bz2",
+         sha256: "d70a9ccd8bdf47e302d96c69fecd54925f45d9c7b966bb4ef5f56b770960afa7"
 end
-
-source url: "http://www.bzip.org/#{version}/#{name}-#{version}.tar.gz"
 
 relative_path "#{name}-#{version}"
 

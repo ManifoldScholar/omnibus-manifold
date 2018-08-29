@@ -52,15 +52,23 @@ the compiled packages will appear in the `pkg` folder on the _host_.
 
 ```shell
 vagrant up centos7-builder
-bin/rake centos7:build
+bin/rake build:centos7
 ```
 
 ##### Ubuntu 16
 
 ```shell
 vagrant up ubuntu16-builder
-bin/rake ubuntu16:build
+bin/rake build:ubuntu16
 ```
+
+##### Ubuntu 18
+
+```shell
+vagrant up ubuntu18-builder
+bin/rake build:ubuntu18
+```
+
 
 ### Clean
 
