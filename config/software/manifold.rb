@@ -1,7 +1,5 @@
 name "manifold"
-
-# default_version 'v1.0.1'
-default_version 'master'
+default_version 'v2.0.0-rc.1'
 source github: 'ManifoldScholar/manifold'
 license :project_license
 
