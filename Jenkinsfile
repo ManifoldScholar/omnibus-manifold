@@ -16,14 +16,14 @@ def buildUbuntu18 = [
 	target: 'ubuntu18'
 ]
 
-def buildRhel = [
-	label: "build-rhel",
-	pkgName: 'manifold_${tag}-1_amd64.deb',
-	metaName: "manifold_${versionFromTag(tag)}-1_amd64.deb.metadata.json",
-	target: 'rhel'
+def buildCentos7 = [
+	label: "build-centos7",
+	pkgName: "manifold-${versionFromTag(tag).replace('-','~')}-1.el7.x86_64.rpm",
+	metaName: "manifold-${versionFromTag(tag).replace('-','~')}-1.el7.x86_64.rpm.metadata.json",
+	target: 'centos7'
 ]
 
-def builds = [buildUbuntu16, buildUbuntu18]
+def builds = [buildUbuntu16, buildUbuntu18, buildCentos7]
 
 def branches = [:]
 for (x in builds) {
