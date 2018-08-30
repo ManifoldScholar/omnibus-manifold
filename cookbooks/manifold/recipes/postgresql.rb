@@ -124,10 +124,8 @@ end
 # run only on new installation at which point we expect to have correct binaries.
 include_recipe 'manifold::postgresql-bin'
 
-if node['manifold']['bootstrap']['enable']
-  execute "/opt/manifold/bin/manifold-ctl start postgresql" do
-    retries 20
-  end
+execute "/opt/manifold/bin/manifold-ctl start postgresql" do
+  retries 20
 end
 
 ###
@@ -145,7 +143,6 @@ pg_port = node['manifold']['postgresql']['port']
 database_name = node['manifold']['manifold-api']['db_database']
 manifold_sql_user = node['manifold']['postgresql']['sql_user']
 sql_replication_user = node['manifold']['postgresql']['sql_replication_user']
-
 
 if node['manifold']['manifold-api']['enable']
   execute "create #{manifold_sql_user} database user" do

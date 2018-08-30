@@ -170,6 +170,31 @@ include_recipe "manifold::logrotate_folders_and_configs"
   end
 end
 
-execute "/opt/manifold/bin/manifold-api searchkick:reindex:all" do
+execute "elasticsearch-start" do
+  command "/opt/manifold/bin/manifold-ctl start elasticsearch"
+
+  retries 20
+
+  notifies :run, "execute[elasticsearch-wait]", :immediately
+end
+
+execute "elasticsearch-wait" do
+  command "curl -s #{vars[:elasticsearch_url]}"
+
+  action :nothing
+
+  retries 20
+
+  retry_delay 5
+
+  notifies :run, "execute[searchkick-reindex]", :immediately
+end
+
+execute "searchkick-reindex" do
+  command "/opt/manifold/bin/manifold-api searchkick:reindex:all"
+  action :nothing
+
   retries 10
+
+  retry_delay 5
 end
