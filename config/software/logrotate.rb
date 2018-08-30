@@ -29,6 +29,7 @@ version("3.9.2") { source md5: "584bca013dcceeb23b06b27d6d0342fb" }
 version("3.8.9") { source md5: "e6da1f1b91d1f202d26caaf864aa0d71" }
 
 relative_path "logrotate-#{version}"
+whitelist_file /logrotate/
 
 build do
   env = with_standard_compiler_flags(with_embedded_path).merge(
