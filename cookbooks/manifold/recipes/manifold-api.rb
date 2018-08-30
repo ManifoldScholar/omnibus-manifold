@@ -140,6 +140,12 @@ end
   "/opt/manifold/embedded/src/api/log" => manifold_api_log_dir,
   "/opt/manifold/embedded/src/config/keys" => manifold_api_keys_directory,
 }.each do |link_dir, target_dir|
+  directory link_dir do
+    action :delete
+    only_if %[test -d #{link_dir} && test ! -L #{link_dir}]
+    recursive
+  end
+
   link link_dir do
     to target_dir
     mode "0775"
