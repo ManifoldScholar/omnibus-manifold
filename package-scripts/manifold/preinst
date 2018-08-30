@@ -5,3 +5,20 @@
 #
 
 echo "You're about to install manifold!"
+
+stop_current_manifold() {
+	local manifold_ctl="$(which manifold-ctl)"
+
+	if [ -z "$manifold_ctl" -o ! -x "${manifold_ctl}" ]; then
+		return
+	fi
+
+	echo "Detected an existing manifold installation"
+
+	if "$manifold_ctl" status | grep --no-messages '^run:' >/dev/null; then
+		echo "Stopping existing manifold..."
+		"$manifold_ctl" stop
+	fi
+}
+
+stop_current_manifold
