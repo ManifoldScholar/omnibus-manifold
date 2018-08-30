@@ -5,6 +5,7 @@ This project creates full-stack platform-specific packages for
 
 ### Supported Package Platforms
 
+* Ubuntu 18.04 x86_64
 * Ubuntu 16.04 x86_64
 * CentOS 7.5 x86_64 (other RHEL7 derivatives should work, but have not been tested)
 * macOS (provisional, not intended for production use).
