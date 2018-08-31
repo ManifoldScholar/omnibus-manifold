@@ -15,28 +15,19 @@
 # limitations under the License.
 #
 require 'digest'
+require 'fileutils'
 
 omnibus_helper = OmnibusHelper.new(node)
 
 dependent_services = []
+dependent_services << "service[cable]" if omnibus_helper.should_notify?("cable")
+dependent_services << "service[clockwork]" if omnibus_helper.should_notify?("clockwork")
 dependent_services << "service[puma]" if omnibus_helper.should_notify?("puma")
 dependent_services << "service[sidekiq]" if omnibus_helper.should_notify?("sidekiq")
 
-connection_attributes = [
-    'db_adapter',
-    'db_database',
-    'db_host',
-    'db_port',
-    'db_socket'
-].collect { |attribute| node['manifold']['manifold-api'][attribute] }
-connection_digest = Digest::MD5.hexdigest(Marshal.dump(connection_attributes))
-
-revision_file = "/opt/manifold/embedded/service/manifold-api/REVISION"
-if ::File.exist?(revision_file)
-  revision = IO.read(revision_file).chomp
-end
-upgrade_status_dir = ::File.join(node['manifold']['manifold-api']['dir'], "upgrade-status")
-db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{connection_digest}-#{revision}")
+src_dir               = node['manifold']['manifold-api']['src']
+current_schema_file   = File.join(src_dir, 'db', 'schema.rb')
+previous_schema_file  = File.join(src_dir, 'db', 'previous_schema.rb')
 
 # TODO: Refactor this into a resource
 # Currently blocked due to a bug in Chef 12.6.0
@@ -44,19 +35,27 @@ db_migrate_status_file = ::File.join(upgrade_status_dir, "db-migrate-#{connectio
 bash "migrate manifold-api database" do
   code <<-EOH
     set -e
+    cp -v #{current_schema_file} #{previous_schema_file}
     log_file="#{node['manifold']['manifold-api']['log_directory']}/manifold-api-db-migrate-$(date +%Y-%m-%d-%H-%M-%S).log"
     umask 0022
     /opt/manifold/bin/manifold-api db:migrate
     /opt/manifold/bin/manifold-api db:seed
-    STATUS=${PIPESTATUS[0]}
-    echo $STATUS > #{db_migrate_status_file}
-    exit $STATUS
   EOH
+
   notifies :run, 'execute[enable pg_trgm extension]', :before unless omnibus_helper.not_listening?("postgresql") || !node['manifold']['postgresql']['enable']
-  #notifies :run, "execute[clear the manifold-api cache]", :immediately unless omnibus_helper.not_listening?("redis") || !node['manifold']['manifold-api']['rake_cache_clear']
+  notifies :run, 'execute[post-migration notification]', :immediately
+
+  only_if { node['manifold']['manifold-api']['auto_migrate'] }
+end
+
+execute "post-migration notification" do
+  action :nothing
+
+  command "echo 'restarting services that depend on the database'"
+
+  not_if { File.exists?(previous_schema_file) && FileUtils.cmp(current_schema_file, previous_schema_file) }
+
   dependent_services.each do |svc|
     notifies :restart, svc, :immediately
   end
-  not_if "(test -f #{db_migrate_status_file}) && (cat #{db_migrate_status_file} | grep -Fx 0)"
-  only_if { node['manifold']['manifold-api']['auto_migrate'] }
 end
