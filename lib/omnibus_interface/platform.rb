@@ -161,7 +161,7 @@ module OmnibusInterface
       when '.pkg'
         %[/usr/sbin/installer -pkg #{path_to_pkg} -target /]
       when '.rpm'
-        %[sudo rpm -ivh #{package_path}]
+        %[sudo rpm -Uvh #{package_path}]
       else
         raise "Unknown package extension: #{package_path}"
       end
