@@ -3,12 +3,7 @@
 # Symlink the ctl commands
 DEST_DIR=${1:-/opt/manifold}
 
-if [ -s "/etc/redhat-release" ]; then
-	# RHEL uses /usr/local/sbin in the default root $PATH rather than /usr/local/bin
-	TARGET="/usr/local/sbin"
-else
-	TARGET="/usr/local/bin"
-fi
+TARGET=/usr/bin
 
 error_exit()
 {
@@ -24,6 +19,24 @@ create_symlink() {
 	ln -fs "$source" "$target" || error_exit "Failed to create ${basename} symlink in ${TARGET}"
 }
 
+remove_symlink() {
+	local source=${1?'Must provide a source'}
+
+	if [ -h "${source}" ]; then
+		rm "${source}" >/dev/null
+	fi
+}
+
+remove_local_symlink() {
+	local program=${1?'Must provide a program'}
+
+	local sbin_source="/usr/local/sbin/${program}"
+	local bin_source="/usr/local/bin/${program}"
+
+	remove_symlink "${sbin_source}"
+	remove_symlink "${bin_source}"
+}
+
 create_symlinks()
 {
 	create_symlink ${DEST_DIR}/bin/manifold-ctl
@@ -34,4 +47,14 @@ create_symlinks()
 	create_symlink ${DEST_DIR}/bin/pandoc-citeproc
 }
 
+remove_local_symlinks() {
+	remove_local_symlink manifold-ctl
+	remove_local_symlink manifold-rake
+	remove_local_symlink manifold-api
+	remove_local_symlink manifold-psql
+	remove_local_symlink pandoc
+	remove_local_symlink pandoc-citeproc
+}
+
 create_symlinks
+remove_local_symlinks
