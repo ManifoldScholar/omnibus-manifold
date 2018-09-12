@@ -60,7 +60,7 @@ server {
   server_name <%= @fqdn %> localhost 127.0.0.1;
   server_tokens off;
 
-  client_max_body_size <%= @client_max_body_size %>
+  client_max_body_size <%= @client_max_body_size %>;
   client_body_timeout 180s;
   proxy_send_timeout 180s;
   proxy_read_timeout 180s;
