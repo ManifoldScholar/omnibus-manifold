@@ -296,7 +296,7 @@ default['manifold']['nginx']['gzip_comp_level'] = "2"
 default['manifold']['nginx']['gzip_proxied'] = "any"
 default['manifold']['nginx']['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
 default['manifold']['nginx']['keepalive_timeout'] = 65
-default['manifold']['nginx']['client_max_body_size'] = 0
+default['manifold']['nginx']['client_max_body_size'] = '250m'
 default['manifold']['nginx']['cache_max_size'] = '5000m'
 default['manifold']['nginx']['redirect_http_to_https'] = false
 default['manifold']['nginx']['ssl_client_certificate'] = nil # Most root CA's will be included by default
@@ -312,11 +312,7 @@ default['manifold']['nginx']['ssl_session_cache'] = "builtin:1000  shared:SSL:10
 default['manifold']['nginx']['ssl_session_timeout'] = "5m" # default according to http://nginx.org/en/docs/http/ngx_http_ssl_module.html
 default['manifold']['nginx']['ssl_dhparam'] = nil # Path to dhparam.pem
 default['manifold']['nginx']['listen_addresses'] = ['*']
-if node[:platform] == "mac_os_x"
-  default['manifold']['nginx']['listen_port'] = 3030 # override only if you have a reverse proxy
-else
-  default['manifold']['nginx']['listen_port'] = 80 # override only if you have a reverse proxy
-end
+default['manifold']['nginx']['listen_port'] = 80 # override only if you have a reverse proxy
 default['manifold']['nginx']['listen_https'] = false
 default['manifold']['nginx']['custom_manifold_server_config'] = nil
 default['manifold']['nginx']['custom_nginx_config'] = nil
