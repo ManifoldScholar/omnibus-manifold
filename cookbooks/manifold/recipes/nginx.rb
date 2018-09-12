@@ -3,19 +3,18 @@ omnibus_helper = OmnibusHelper.new(node)
 
 nginx_dir       = node['manifold']['nginx']['dir']
 nginx_conf_dir  = File.join(nginx_dir, "conf")
+nginx_ssl_dir   = "/etc/manifold/ssl"
 nginx_log_dir   = node['manifold']['nginx']['log_directory']
 
-if node[:platform] == "mac_os_x"
-  svc_group = "wheel"
-else
-  svc_group = "root"
-end
+svc_group = "root"
+svc_group = "wheel" if node[:platform] == "mac_os_x"
 
 # These directories do not need to be writable for manifold-www
 [
   nginx_dir,
   nginx_conf_dir,
   nginx_log_dir,
+  nginx_ssl_dir
 ].each do |dir_name|
   directory dir_name do
     owner 'root'
@@ -29,45 +28,45 @@ link File.join(nginx_dir, "logs") do
   to nginx_log_dir
 end
 
-nginx_config          = File.join(nginx_conf_dir, "nginx.conf")
-manifold_api_http_conf = File.join(nginx_conf_dir, "manifold-http.conf")
-nginx_status_conf     = File.join(nginx_conf_dir, "nginx-status.conf")
+puma_enabled = node['manifold']['manifold-api']['enable'] &&
+               node['manifold']['puma']['enable']
+cable_enabled = node['manifold']['manifold-api']['enable'] &&
+                node['manifold']['cable']['enable']
+client_enabled = !!node['manifold']['client']['enable']
+nginx_enabled = puma_enabled || client_enabled || cable_enabled
+nginx_status_enabled = nginx_enabled &&
+                       node['manifold']['nginx']['status']['enable']
 
-# If the service is enabled, check if we are using internal nginx
-manifold_api_enabled = if node['manifold']['manifold-api']['enable']
-                         node['manifold']['nginx']['enable']
-                       else
-                         false
-                       end
+# Individual config templates to be included
+nginx_config           = File.join(nginx_conf_dir, "nginx.conf")
+nginx_status_conf      = File.join(nginx_conf_dir, "nginx-status.conf")
+manifold_http_conf = File.join(nginx_conf_dir, "manifold-http.conf")
 
-nginx_status_enabled = node['manifold']['nginx']['status']['enable']
-
-# Include the config file for manifold-api in nginx.conf later
+# Include the config file for manifold services in nginx.conf later
 nginx_vars = node['manifold']['nginx'].to_hash.merge({
-  manifold_http_config:    manifold_api_enabled   ? manifold_api_http_conf : nil,
-  nginx_status_config:  nginx_status_enabled  ? nginx_status_conf     : nil,
+  manifold_http_config: nginx_enabled         ? manifold_http_conf : nil,
+  nginx_status_config:  nginx_status_enabled  ? nginx_status_conf  : nil,
 })
 
-if nginx_vars['listen_https'].nil?
-  nginx_vars['https'] = node['manifold']['manifold-api']['manifold_https']
-else
-  nginx_vars['https'] = nginx_vars['listen_https']
-end
-
-template manifold_api_http_conf do
+template manifold_http_conf do
   source "nginx-manifold-http.conf.erb"
   owner "root"
   group svc_group
   mode "0644"
   variables(nginx_vars.merge(
     {
-      :fqdn => node['manifold']['manifold-api']['manifold_host'] || "127.0.0.1",
-      :relative_url => node['manifold']['manifold-api']['manifold_relative_url'],
+      puma_enabled: puma_enabled,
+      puma_socket: node['manifold']['puma']['socket'],
+      client_enabled: client_enabled,
+      client_socket: node['manifold']['client']['socket'],
+      cable_enabled: cable_enabled,
+      cable_socket: node['manifold']['cable']['socket'],
+      fqdn: node['manifold']['manifold-api']['manifold_host'] || "127.0.0.1"
     }
   ))
   notifies :restart, 'service[nginx]' if omnibus_helper.should_notify?("nginx")
 
-  action manifold_api_enabled ? :create : :delete
+  action nginx_enabled ? :create : :delete
 end
 
 template nginx_status_conf do

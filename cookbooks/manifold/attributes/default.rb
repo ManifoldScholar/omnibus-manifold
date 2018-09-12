@@ -299,12 +299,12 @@ default['manifold']['nginx']['keepalive_timeout'] = 65
 default['manifold']['nginx']['client_max_body_size'] = 0
 default['manifold']['nginx']['cache_max_size'] = '5000m'
 default['manifold']['nginx']['redirect_http_to_https'] = false
-default['manifold']['nginx']['redirect_http_to_https_port'] = 3030
 default['manifold']['nginx']['ssl_client_certificate'] = nil # Most root CA's will be included by default
 default['manifold']['nginx']['ssl_verify_client'] = nil # do not enable 2-way SSL client authentication
 default['manifold']['nginx']['ssl_verify_depth'] = "1" # n/a if ssl_verify_client off
 default['manifold']['nginx']['ssl_certificate'] = "/etc/manifold/ssl/#{node['fqdn']}.crt"
 default['manifold']['nginx']['ssl_certificate_key'] = "/etc/manifold/ssl/#{node['fqdn']}.key"
+default['manifold']['nginx']['ssl_trusted_certificate'] = nil
 default['manifold']['nginx']['ssl_ciphers'] = "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4"
 default['manifold']['nginx']['ssl_prefer_server_ciphers'] = "on"
 default['manifold']['nginx']['ssl_protocols'] = "TLSv1 TLSv1.1 TLSv1.2" # recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html & https://cipherli.st/
@@ -317,7 +317,7 @@ if node[:platform] == "mac_os_x"
 else
   default['manifold']['nginx']['listen_port'] = 80 # override only if you have a reverse proxy
 end
-default['manifold']['nginx']['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP
+default['manifold']['nginx']['listen_https'] = false
 default['manifold']['nginx']['custom_manifold_server_config'] = nil
 default['manifold']['nginx']['custom_nginx_config'] = nil
 default['manifold']['nginx']['proxy_read_timeout'] = 3600
