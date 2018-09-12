@@ -198,7 +198,10 @@ module OmnibusInterface
     end
 
     def sync_cookbooks_command
-      conditionally_sudo %[rsync -a ./cookbooks #{env.cookbook_dir}], if_test: %[-w #{env.cookbook_dir}]
+      cmd = "rsync -av /vagrant/cookbooks/ #{env.cookbook_dir}"
+      puts "Synchronizing shared cookbook dir in VM to installed cookbooks dir..."
+      puts "  #{cmd}"
+      conditionally_sudo %[#{cmd}], if_test: %[-w #{env.cookbook_dir}]
     end
 
     def sync_then_reconfigure_command
