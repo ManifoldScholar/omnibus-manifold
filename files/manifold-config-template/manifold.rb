@@ -32,16 +32,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## settings.yml configuration
 ################################################################################
 
-### Demo settings
-# manifold_api['manifold_is_demo'] = true
-
-### Email Settings
-# manifold_api['manifold_email_enabled'] = true
-# manifold_api['manifold_email_from'] = 'example@example.com'
-# manifold_api['manifold_email_display_name'] = 'Example'
-# manifold_api['manifold_email_reply_to'] = 'noreply@example.com'
-# manifold_api['manifold_email_subject_suffix'] = ''
-
 ### Trusted proxies
 ###! Customize if you have Manifold behind a reverse proxy which is running on a
 ###! different machine.
@@ -87,16 +77,6 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 #### Redis local UNIX socket (will be disabled if TCP method is used)
 # manifold_api['redis_socket'] = "/var/opt/manifold/redis/redis.socket"
-
-### Manifold email server settings
-###! **Use smtp instead of sendmail/postfix.**
-
-###! **Can be: 'none', 'peer', 'client_once', 'fail_if_no_peer_cert'**
-###! Docs: http://api.rubyonrails.org/classes/ActionMailer/Base.html
-# manifold_api['smtp_openssl_verify_mode'] = 'none'
-
-# manifold_api['smtp_ca_path'] = "/etc/ssl/certs"
-# manifold_api['smtp_ca_file'] = "/etc/ssl/certs/ca-certificates.crt"
 
 ################################################################################
 ## Manifold User Settings

@@ -107,10 +107,6 @@ default['manifold']['manifold-api']['redis_db'] = 1
 default['manifold']['manifold-api']['elasticsearch_host'] = "127.0.0.1"
 default['manifold']['manifold-api']['elasticsearch_port'] = 3036
 
-# Path to the public Certificate Authority file
-# defaults to /opt/manifold/embedded/ssl/certs/cacert.pem. The install-dir path is set at build time
-default['manifold']['manifold-api']['smtp_ca_file'] = "#{node['package']['install-dir']}/embedded/ssl/certs/cacert.pem"
-
 # Path to directory that contains (ca) certificates that should also be trusted (e.g. on
 # outgoing Webhooks connections). For these certificates symlinks will be created in
 # /opt/manifold/embedded/ssl/certs/.
