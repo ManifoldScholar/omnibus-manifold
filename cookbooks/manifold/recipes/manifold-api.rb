@@ -126,7 +126,7 @@ env_dir File.join(manifold_api_static_etc_dir, 'env') do
   }
 
   variables(
-    rails_env.merge(node['manifold']['manifold-api']['env'])
+    rails_env.merge(node['manifold']['manifold-api']['base_env'])
   )
 
   restarts dependent_services

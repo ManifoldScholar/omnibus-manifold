@@ -115,7 +115,8 @@ vars = {
     domain: domain,
     api_url: api_url_parts.join(""),
     cable_url: cable_url_parts.join(""),
-    elasticsearch_url: elasticsearch_url_parts.join("")
+    elasticsearch_url: elasticsearch_url_parts.join(""),
+    additional_env: node['manifold']['manifold-api']['env']
 }
 
 templatesymlink "Setup the API app environment" do

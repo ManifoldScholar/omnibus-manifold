@@ -51,6 +51,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 #### Enable or disable automatic database migrations
 # manifold_api['auto_migrate'] = true
 
+#### Add custom environment to Manifold API
+# manifold_api['env'] = {
+#   FOO => "bar"
+# }
+
 ### Manifold database settings
 ###! **Only needed if you use an external database.**
 # manifold_api['db_adapter'] = "postgresql"

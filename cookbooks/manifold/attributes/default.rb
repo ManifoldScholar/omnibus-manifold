@@ -53,15 +53,12 @@ default['manifold']['manifold-api']['dir'] = "/var/opt/manifold/api"
 default['manifold']['manifold-api']['src'] = "#{node['package']['install-dir']}/embedded/src/api"
 default['manifold']['manifold-api']['log_directory'] = "/var/log/manifold/api"
 default['manifold']['manifold-api']['environment'] = 'production'
-default['manifold']['manifold-api']['env'] = {
+default['manifold']['manifold-api']['base_env'] = {
   'SIDEKIQ_MEMORY_KILLER_MAX_RSS' => '1000000',
-  # Path to the Gemfile
-  # defaults to /opt/manifold/embedded/src/api/Gemfile. The install-dir path is set at build time
   'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/src/api/Gemfile",
-  # PATH to set on the environment
-  # defaults to /opt/manifold/embedded/bin:/bin:/usr/bin. The install-dir path is set at build time
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/usr/local/bin:/bin:/usr/bin",
 }
+default['manifold']['manifold-api']['env'] = {}
 default['manifold']['manifold-api']['enable_jemalloc'] = true
 # We don't actually want to expose this in the config.rb, but we configure it here with other shared paths.
 default['manifold']['manifold-api']['tus_directory'] = "/var/opt/manifold/api/data"
