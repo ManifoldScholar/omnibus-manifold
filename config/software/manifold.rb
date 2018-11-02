@@ -45,4 +45,5 @@ build do
       source: 'bundle_exec_wrapper.sh.erb',
       mode:   0755,
       vars:   { command: 'rails "$@"', install_dir: install_dir }
+      
 end
