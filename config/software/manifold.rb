@@ -1,5 +1,5 @@
 name "manifold"
-default_version 'v2.0.7'
+default_version 'v2.1.0-rc.1'
 source github: 'ManifoldScholar/manifold'
 license :project_license
 
@@ -45,5 +45,5 @@ build do
       source: 'bundle_exec_wrapper.sh.erb',
       mode:   0755,
       vars:   { command: 'rails "$@"', install_dir: install_dir }
-      
+
 end
