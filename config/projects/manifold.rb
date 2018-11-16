@@ -1,4 +1,5 @@
-require_relative './../../util/clean_software.rb'
+require_relative '../../util/clean_software.rb'
+require_relative '../../util/read_version'
 
 name "manifold"
 maintainer "Zach Davis, Cast Iron Coding"
