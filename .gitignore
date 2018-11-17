@@ -11,3 +11,4 @@ vendor/cookbooks
 local
 .idea/*
 .DS_Store
+.env

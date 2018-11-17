@@ -7,13 +7,21 @@ gem 'omnibus', '~> 5.6.8'
 # software definitions, but you can clone/fork Chef's to get you started.
 gem 'omnibus-software', github: 'opscode/omnibus-software'
 
+gem 'active_interaction'
 gem 'activesupport', '~> 5.2', require: false
 gem 'attr_lazy'
 gem 'cleanroom'
+gem 'commander'
+gem 'dotenv'
+gem 'dux'
+gem 'git'
+gem 'jenkins_api_client'
 gem 'rake'
 gem 'rb-readline'
+gem 'rugged'
 gem 'pry'
 gem 'ptools'
+gem 'semantic'
 
 # This development group is installed by default when you run `bundle install`,
 # but if you are using Omnibus in a CI-based infrastructure, you do not need
