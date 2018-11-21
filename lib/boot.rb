@@ -16,7 +16,6 @@ require 'jenkins_api_client'
 require 'ohai'
 require 'pry'
 require 'ptools'
-require 'rugged'
 require 'semantic'
 
 require 'dotenv/load'
