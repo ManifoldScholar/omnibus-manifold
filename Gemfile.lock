@@ -271,7 +271,6 @@ GEM
     ruby-progressbar (1.9.0)
     rubyntlm (0.6.2)
     rubyzip (1.2.2)
-    rugged (0.27.5)
     safe_yaml (1.0.4)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
@@ -366,7 +365,6 @@ DEPENDENCIES
   rake
   rb-readline
   rubyzip (>= 1.2.2, < 2.0)
-  rugged
   semantic
   test-kitchen (~> 1.4)
 
