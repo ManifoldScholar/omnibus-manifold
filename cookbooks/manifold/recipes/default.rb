@@ -149,7 +149,7 @@ templatesymlink "Setup the client browser environment" do
   variables(vars)
 end
 
-include_recipe "manifold::database_migrations" if node['manifold']['manifold-api']['enable']
+include_recipe "manifold::database_migrations"
 include_recipe "manifold::logrotate_folders_and_configs"
 
 # Configure Services

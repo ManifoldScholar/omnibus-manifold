@@ -29,10 +29,39 @@ src_dir               = node['manifold']['manifold-api']['src']
 current_schema_file   = File.join(src_dir, 'db', 'schema.rb')
 previous_schema_file  = File.join(src_dir, 'db', 'previous_schema.rb')
 
+# Redis needs to be running for migrations to work correctly.
+execute "redis-start" do
+  command "/opt/manifold/bin/manifold-ctl start redis"
+
+  retries 20
+
+  notifies :run, "bash[redis-wait]", :immediately
+end
+
+bash "redis-wait" do
+  action :nothing
+  
+  code <<~EOH
+  set -x
+
+  response=$(#{omnibus_helper.redis_cli_command("ping")})
+
+  [ "${response}" = "PONG" ]
+  EOH
+
+  retries 20
+
+  retry_delay 5
+
+  notifies :run, "bash[migrate manifold-api database]", :immediately
+end
+
 # TODO: Refactor this into a resource
 # Currently blocked due to a bug in Chef 12.6.0
 # https://github.com/chef/chef/issues/4537
 bash "migrate manifold-api database" do
+  action :nothing
+
   code <<-EOH
     set -e
     cp -v #{current_schema_file} #{previous_schema_file}
@@ -43,8 +72,6 @@ bash "migrate manifold-api database" do
   EOH
 
   notifies :run, 'execute[post-migration notification]', :immediately
-
-  only_if { node['manifold']['manifold-api']['auto_migrate'] }
 end
 
 execute "post-migration notification" do

@@ -1,5 +1,6 @@
 require 'mixlib/shellout'
 require_relative 'helper'
+require 'shellwords'
 
 class OmnibusHelper
   include ShellOutHelper
@@ -36,5 +37,57 @@ class OmnibusHelper
 
   def group_exists?(group)
     success?("getent group #{group}")
+  end
+
+  def redis_cli_command(*args)
+    "/opt/manifold/embedded/bin/redis-cli #{redis_cli_args} #{escape_for_shell(args)}"
+  end
+
+  def redis_cli_args
+    @redis_cli_args ||= escape_for_shell(build_redis_cli_args)
+  end
+
+  # Not usable until Redis 4.0+
+  def redis_url
+    @redis_url ||= build_redis_url
+  end
+
+  private
+
+  def build_redis_cli_args
+    [].tap do |args|
+      redis = node['manifold']['redis']
+
+      password = redis['password'].to_s
+
+      args << '-h' << redis['bind']
+      args << '-p' << redis['port']
+
+      args << '-a' << password unless password.empty?
+    end
+  end
+
+  def build_redis_url
+    args = {}.tap do |h|
+      redis = node['manifold']['redis']
+
+      h[:scheme] = 'redis'
+
+      password = redis['password'].to_s
+
+      h[:userinfo] = ":#{password}" unless password.empty?
+
+      h[:host] = redis['bind']
+      h[:port] = redis['port']
+      h[:path] = "/0"
+    end
+
+    URI::Generic.build(args).to_s
+  end
+
+  def escape_for_shell(args)
+    Array(args).flatten.map do |arg|
+      Shellwords.escape arg
+    end.join(' ')
   end
 end
