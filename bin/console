@@ -6,6 +6,8 @@ require_relative '../lib/boot'
 
 require 'omnibus'
 
+require_relative '../util/read_version'
+
 Pry.config.prompt_name = "omnibus-manifold"
 
 Pry.start

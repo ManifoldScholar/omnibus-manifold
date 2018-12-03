@@ -18,6 +18,7 @@ build_version do
   source :git, from_dependency: 'manifold'
 end
 
+build_iteration ReadVersion.build_iteration
 
 # Creates required build directories
 dependency "preparation"
