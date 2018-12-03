@@ -168,11 +168,3 @@ if node['manifold']['manifold-api']['enable']
     not_if { !pg_helper.is_running? || pg_helper.user_exists?(sql_replication_user) }
   end
 end
-
-execute "enable pg_trgm extension" do
-  command "/opt/manifold/bin/manifold-psql -d #{database_name} -c \"CREATE EXTENSION IF NOT EXISTS pg_trgm;\""
-  user postgresql_user
-  retries 20
-  action :nothing
-  not_if { !pg_helper.is_running? || pg_helper.is_slave? }
-end

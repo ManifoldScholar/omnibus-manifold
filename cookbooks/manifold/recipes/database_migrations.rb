@@ -42,7 +42,6 @@ bash "migrate manifold-api database" do
     /opt/manifold/bin/manifold-api db:seed
   EOH
 
-  notifies :run, 'execute[enable pg_trgm extension]', :before unless omnibus_helper.not_listening?("postgresql") || !node['manifold']['postgresql']['enable']
   notifies :run, 'execute[post-migration notification]', :immediately
 
   only_if { node['manifold']['manifold-api']['auto_migrate'] }
