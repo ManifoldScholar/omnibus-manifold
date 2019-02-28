@@ -4,17 +4,12 @@ license_file "BSDL"
 license_file "COPYING"
 license_file "LEGAL"
 skip_transitive_dependency_licensing true
-default_version "2.3.3"
+default_version "2.3.8"
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
-version("2.4.0") do
-  # Not currently using 2.4.0 because of between Rails & json gem incompatibitilies with integer unification
-  source sha512: "21c9f596b42dd9cba7a53963a59fed0c2e0c1eb960a4ac7087ea3eaa991ce9252d32639e1edcb75b1d709bc07c4820a6dc336ab427d0643c6e6498e0eacdbc8b"
-end
-
-version("2.3.3") do
-  source sha512: "80d9f3aaf1d60b9b2f4a6fb8866713ce1e201a3778ef9e16f1bedb7ccda35aefdd7babffbed1560263bd95ddcfe948f0c9967b5077a89db8b2e18cacc7323975"
+version("2.3.8") do
+  source sha512: "43b02f2f9de6baf281f09a49fd07367127b4de1fb14473380d06bfa7667990d8f722ae2d33cf7d15b02f7e799515f21aebd308897c4c2a5461ebab4049d6c7ef"
 end
 
 dependency "ncurses" unless windows? || version.satisfies?('>= 2.1')

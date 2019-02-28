@@ -1,12 +1,12 @@
 name "pandoc-binary"
-default_version "2.2.2"
+default_version "2.6"
 
 license "MIT"
 license_file "LICENSE"
 skip_transitive_dependency_licensing true
 
-version "2.2.2" do
-  source sha256: "115602dfa9200f177ddd75e140db24e1bd32d9ef440d03613b42f163186ade10"
+version "2.6" do
+  source sha256: "4f40bddeb0b0fa50a89c0301e9342c52439d4d8685f0631cafd040dcc2c97ab3"
 end
 
 source url: "https://github.com/jgm/pandoc/releases/download/#{version}/pandoc-#{version}-linux.tar.gz"

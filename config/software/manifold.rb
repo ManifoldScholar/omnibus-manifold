@@ -4,6 +4,9 @@ source github: 'ManifoldScholar/manifold'
 license :project_license
 skip_transitive_dependency_licensing true
 
+dependency "yarn"
+dependency "nodejs-binary"
+
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   # Yarn will need node, so we'll add it to the path.
