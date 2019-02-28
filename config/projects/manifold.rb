@@ -22,6 +22,9 @@ build_iteration ReadVersion.build_iteration
 
 # Creates required build directories
 dependency "preparation"
+# Healthcheck will fail without it because nginx software definition does not
+# explicitly require it.
+dependency "zlib"
 
 # Manifold dependencies/components
 dependency "nodejs-binary"
