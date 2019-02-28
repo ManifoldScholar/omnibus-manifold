@@ -130,7 +130,7 @@ templatesymlink "Setup the API app environment" do
 end
 
 templatesymlink "Setup the client node app environment" do
-  link_from File.join(manifold_source_dir, "client/dist/manifold", "server.config.js")
+  link_from File.join(manifold_source_dir, "client/dist/manifold/ssr", "ssr.config.js")
   link_to File.join("/var/opt/manifold/etc", "node-env.js")
   source "node-env.js.erb"
   owner root_user
