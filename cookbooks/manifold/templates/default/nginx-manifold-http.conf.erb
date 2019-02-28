@@ -2,14 +2,6 @@
 # erased! To change the contents below, edit /etc/manifold/manifold.rb
 # and run `sudo manifold-ctl reconfigure`.
 
-##
-## Lines starting with two hashes (##) are comments with information.
-## Lines starting with one hash (#) are configuration parameters that can be uncommented.
-##
-###################################
-##         configuration         ##
-###################################
-
 <% if @puma_enabled %>
 upstream manifold_puma {
   server unix:<%= node['manifold']['puma']['socket'] %>;
