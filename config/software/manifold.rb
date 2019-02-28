@@ -2,6 +2,7 @@ name "manifold"
 default_version ReadVersion.('MANIFOLD_VERSION')
 source github: 'ManifoldScholar/manifold'
 license :project_license
+skip_transitive_dependency_licensing true
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

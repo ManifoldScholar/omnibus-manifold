@@ -3,6 +3,7 @@ require 'erb'
 name "manifold-ctl"
 
 license :project_license
+skip_transitive_dependency_licensing true
 
 dependency "omnibus-ctl"
 dependency "runit"

@@ -4,6 +4,7 @@ name "manifold-psql"
 
 license "Apache-2.0"
 license_file File.expand_path("LICENSE", Omnibus::Config.project_root)
+skip_transitive_dependency_licensing true
 
 # This 'software' is self-contained in this file. Use the file contents
 # to generate a version string.
