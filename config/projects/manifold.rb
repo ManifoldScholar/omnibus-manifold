@@ -5,7 +5,7 @@ name "manifold"
 maintainer "Zach Davis, Cast Iron Coding"
 homepage "https://github.com/manifoldScholar/manifold"
 
-license "MIT"
+license "GPL-3.0"
 
 replace   "manifold"
 conflict  "manifold"
