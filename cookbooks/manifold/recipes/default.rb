@@ -150,7 +150,6 @@ templatesymlink "Setup the client browser environment" do
 end
 
 include_recipe "manifold::database_migrations"
-include_recipe "manifold::logrotate_folders_and_configs"
 
 # Configure Services
 [

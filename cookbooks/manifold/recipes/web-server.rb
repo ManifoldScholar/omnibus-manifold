@@ -14,7 +14,7 @@ account "Webserver user and group" do
 
   append_to_group external_webserver_users.any?
   group_members   external_webserver_users
-  user_supports   manage_home: false
+  manage_home     false
 
   manage node['manifold']['manage-accounts']['enable']
 end
