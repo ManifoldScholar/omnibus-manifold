@@ -23,7 +23,7 @@ build_iteration ReadVersion.build_iteration
 # Creates required build directories
 dependency "preparation"
 
-# manifold dependencies/components
+# Manifold dependencies/components
 dependency "nodejs-binary"
 dependency "pandoc-binary"
 dependency "chef-gem"
@@ -41,6 +41,8 @@ dependency "icu"
 dependency "yarn"
 dependency "logrotate"
 dependency "elasticsearch"
+
+# Manifold itself
 dependency "manifold"
 dependency "manifold-psql"
 dependency "manifold-scripts"
