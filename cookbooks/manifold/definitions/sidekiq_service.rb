@@ -8,7 +8,7 @@ define :sidekiq_service, :rails_app => nil, :user => nil do
   else
     svc_group = "root"
   end
-
+  rails_src = node['manifold'][rails_app]['src']
   sidekiq_log_dir = node['manifold'][svc]['log_directory']
 
   directory sidekiq_log_dir do
@@ -24,6 +24,7 @@ define :sidekiq_service, :rails_app => nil, :user => nil do
     options({
       :rails_app => rails_app,
       :src_dir => src_dir,
+      :rails_src => rails_src,
       :user => user,
       :shutdown_timeout => node['manifold'][svc]['shutdown_timeout'],
       :concurrency => node['manifold'][svc]['concurrency'],
