@@ -140,6 +140,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define 'ubuntu18-install' do |install|
     install.vm.box = 'bento/ubuntu-18.04'
 
+    config.vm.provider :virtualbox do |vb|
+      vb.memory =6168
+    end
+
     install.dns.tld = 'vagrant'
 
     install.vm.hostname = "ubuntu18-install.omnibus-#{project_name}"

@@ -12,7 +12,7 @@ property :group, String
 property :mode, String
 property :variables, Hash, default: {}
 property :helpers, Module, default: SingleQuoteHelper
-property :notifies, Array
+property :notification_targets, Array
 property :restarts, Array, default: []
 
 action :create do
@@ -23,7 +23,7 @@ action :create do
     mode new_resource.mode
     variables new_resource.variables
     helpers new_resource.helpers
-    notifies *(new_resource.notifies) if new_resource.notifies
+    notifies *(new_resource.notification_targets) if new_resource.notification_targets
     restarts.each do |resource|
       notifies :restart, resource
     end

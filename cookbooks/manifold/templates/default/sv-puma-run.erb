@@ -6,7 +6,7 @@ exec 2>&1
 
 exec chpst -e <%= @options[:static_etc_dir] %>/env -P \
 -U <%= @options[:user] %> -u <%= @options[:user] %> \
-/opt/manifold/embedded/bin/bundle exec puma \
+<%= @options[:source] %>/bin/puma \
 -C <%= @options[:config] %> \
 --dir <%= @options[:source] %> \
 <%= @options[:rackup] %>

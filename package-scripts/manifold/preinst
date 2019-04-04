@@ -17,7 +17,14 @@ stop_current_manifold() {
 
 	if "$manifold_ctl" status | grep --no-messages '^run:' >/dev/null; then
 		echo "Stopping existing manifold..."
-		"$manifold_ctl" stop
+		"$manifold_ctl" stop cable
+		"$manifold_ctl" stop client
+		"$manifold_ctl" stop clockwork
+		"$manifold_ctl" stop elasticsearch
+		"$manifold_ctl" stop postgresql
+		"$manifold_ctl" stop puma
+		"$manifold_ctl" stop redis
+		"$manifold_ctl" stop sidekiq
 	fi
 }
 

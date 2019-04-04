@@ -8,7 +8,7 @@ exec 2>&1
 
 exec chpst -e /opt/manifold/etc/manifold/<%= @options[:src_dir] %>/env -P \
 -U <%= @options[:user] %> -u <%= @options[:user] %> \
-/opt/manifold/embedded/bin/bundle exec sidekiq \
+<%= @options[:rails_src] %>/bin/sidekiq \
 -e <%= node['manifold'][@options[:rails_app]]['environment'] %> \
 -r /opt/manifold/embedded/src/<%= @options[:src_dir] %> \
 -t <%= @options[:shutdown_timeout] %> \

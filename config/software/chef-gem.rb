@@ -15,7 +15,7 @@
 #
 
 name "chef-gem"
-default_version "12.12.15"
+default_version "12.22.5"
 
 license "Apache-2.0"
 license_file "https://github.com/chef/chef/blob/master/LICENSE"

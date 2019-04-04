@@ -10,14 +10,17 @@ namespace :install do
   OmnibusInterface.project.each do |platform|
     if platform.virtualized?
       desc "Install the package for the #{platform.name} platform on a virtual machine"
-      task platform.name => :environment do
-        platform.install_is_running!
+      task platform.name, [:pkg] => :environment do |task, args|
 
+        platform.install_is_running!
+        platform.package_glob = "*/#{platform.name}/#{args[:pkg]}" if args[:pkg]
+        
         exec platform.remote_install_command
       end
     else
       desc "Install the package for the #{platform.name} platform on this host"
-      task platform.name => :environment do
+      task platform.name, [:pkg] => :environment do |task, args|
+        platform.package_glob = "*/#{platform.name}/#{args[:pkg]}" if args[:pkg]
         exec platform.install_command
       end
     end

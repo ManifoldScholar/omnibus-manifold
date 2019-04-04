@@ -15,7 +15,7 @@
 #
 
 name "postgresql"
-default_version "9.6.9"
+default_version "9.6.12"
 
 license "PostgreSQL"
 license_file "COPYRIGHT"
@@ -33,21 +33,8 @@ else
   dependency "libuuid"
 end
 
-
-version "9.5.1" do
-  source md5: "11e037afaa4bd0c90bb3c3d955e2b401"
-end
-
-version "9.4.6" do
-  source md5: "0371b9d4fb995062c040ea5c3c1c971e"
-end
-
-version "9.6.3" do
-  source md5: "ce1d0a57ace0a5b7a994b56796fdba35"
-end
-
-version "9.6.9" do
-  source sha256: "b97952e3af02dc1e446f9c4188ff53021cc0eed7ed96f254ae6daf968c443e2e"
+version "9.6.12" do
+  source sha256: "2e8c8446ba94767bda8a26cf5a2152bf0ae68a86aaebf894132a763084579d84"
 end
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"

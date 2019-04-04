@@ -5,7 +5,7 @@ name "manifold"
 maintainer "Zach Davis, Cast Iron Coding"
 homepage "https://github.com/manifoldScholar/manifold"
 
-license "MIT"
+license "GPL-3.0"
 
 replace   "manifold"
 conflict  "manifold"
@@ -22,8 +22,11 @@ build_iteration ReadVersion.build_iteration
 
 # Creates required build directories
 dependency "preparation"
+# Healthcheck will fail without it because nginx software definition does not
+# explicitly require it.
+dependency "zlib"
 
-# manifold dependencies/components
+# Manifold dependencies/components
 dependency "nodejs-binary"
 dependency "pandoc-binary"
 dependency "chef-gem"
@@ -41,6 +44,8 @@ dependency "icu"
 dependency "yarn"
 dependency "logrotate"
 dependency "elasticsearch"
+
+# Manifold itself
 dependency "manifold"
 dependency "manifold-psql"
 dependency "manifold-scripts"
@@ -54,10 +59,10 @@ dependency "version-manifest"
 exclude "**/.git"
 exclude "**/bundler/git"
 
-override :nodejs, version: "6.10.3"
-override :ruby, version: "2.3.3"
+override :nodejs, version: "8.15.0"
+override :ruby, version: "2.3.8"
 override :libtool, version: "2.4.2"
-override :rubygems, version: "2.6.12"
-override :bundler, version: "1.15.3"
+override :rubygems, version: "2.7.8"
+override :bundler, version: "1.17.3"
 override "omnibus-ctl", version: "v0.5.0"
 override "rb-readline", version: "v0.5.5"
