@@ -19,6 +19,13 @@ require 'fileutils'
 
 omnibus_helper = OmnibusHelper.new(node)
 
+port = node['manifold']['elasticsearch']['port']
+bind = node['manifold']['elasticsearch']['bind']
+elasticsearch_url_parts = ["http://"]
+elasticsearch_url_parts << bind
+elasticsearch_url_parts << ":#{port}" if port
+elasticsearch_url = elasticsearch_url_parts.join("")
+
 dependent_services = []
 dependent_services << "service[cable]" if omnibus_helper.should_notify?("cable")
 dependent_services << "service[clockwork]" if omnibus_helper.should_notify?("clockwork")
@@ -40,7 +47,7 @@ end
 
 bash "redis-wait" do
   action :nothing
-  
+
   code <<~EOH
   set -x
 
@@ -53,12 +60,29 @@ bash "redis-wait" do
 
   retry_delay 5
 
+  notifies :run, "execute[elasticsearch-start]", :immediately
+end
+
+execute "elasticsearch-start" do
+  command "/opt/manifold/bin/manifold-ctl start elasticsearch"
+
+  retries 20
+
+  notifies :run, "execute[elasticsearch-wait]", :immediately
+end
+
+execute "elasticsearch-wait" do
+  command "curl -s #{elasticsearch_url}"
+
+  action :nothing
+
+  retries 20
+
+  retry_delay 5
+
   notifies :run, "bash[migrate manifold-api database]", :immediately
 end
 
-# TODO: Refactor this into a resource
-# Currently blocked due to a bug in Chef 12.6.0
-# https://github.com/chef/chef/issues/4537
 bash "migrate manifold-api database" do
   action :nothing
 
@@ -69,6 +93,7 @@ bash "migrate manifold-api database" do
     umask 0022
     /opt/manifold/bin/manifold-api db:migrate
     /opt/manifold/bin/manifold-api db:seed
+    /opt/manifold/bin/manifold-api manifold:upgrade
   EOH
 
   notifies :run, 'execute[post-migration notification]', :immediately
