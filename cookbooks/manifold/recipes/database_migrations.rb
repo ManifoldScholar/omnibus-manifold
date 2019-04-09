@@ -110,4 +110,5 @@ execute "post-migration notification" do
   dependent_services.each do |svc|
     notifies :restart, svc, :immediately
   end
+
 end

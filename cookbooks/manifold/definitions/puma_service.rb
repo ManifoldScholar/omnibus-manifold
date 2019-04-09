@@ -45,7 +45,6 @@ define :puma_service, :rails_app => nil, :user => nil do
   runit_service svc do
     down node['manifold'][svc]['ha']
     group svc_group
-    restart_command 2 # Restart Puma using SIGUSR2
     template_name 'puma'
     control ['t']
     options({
