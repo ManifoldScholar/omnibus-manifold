@@ -64,6 +64,9 @@ bash "redis-wait" do
 end
 
 execute "elasticsearch-start" do
+
+  action :nothing
+
   command "/opt/manifold/bin/manifold-ctl start elasticsearch"
 
   retries 20
