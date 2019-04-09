@@ -107,8 +107,6 @@ execute "post-migration notification" do
 
   command "echo 'restarting services that depend on the database'"
 
-  not_if { File.exists?(previous_schema_file) && FileUtils.cmp(current_schema_file, previous_schema_file) }
-
   dependent_services.each do |svc|
     notifies :restart, svc, :immediately
   end
