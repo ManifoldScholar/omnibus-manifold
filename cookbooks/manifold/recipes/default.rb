@@ -149,8 +149,6 @@ templatesymlink "Setup the client browser environment" do
   variables(vars)
 end
 
-include_recipe "manifold::database_migrations"
-
 # Configure Services
 [
     "elasticsearch",
@@ -169,3 +167,5 @@ include_recipe "manifold::database_migrations"
     include_recipe "manifold::#{service}_disable"
   end
 end
+
+include_recipe "manifold::database_migrations"
