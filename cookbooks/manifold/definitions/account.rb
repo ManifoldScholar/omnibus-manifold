@@ -1,4 +1,4 @@
-define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil, gid: nil, shell: nil, home: nil, system: true, append_to_group: false, group_members: [], manage_home: true, non_unique: true, manage: nil do
+define :account, action: nil, username: nil, uid: nil, ugid: nil, groupname: nil, gid: nil, shell: nil, home: nil, system: true, append_to_group: false, group_members: [], manage_home: true, non_unique: false, manage: nil do
 
   manage = params[:manage]
 
