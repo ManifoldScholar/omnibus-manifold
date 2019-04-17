@@ -141,7 +141,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     install.vm.box = 'bento/ubuntu-18.04'
 
     config.vm.provider :virtualbox do |vb|
-      vb.memory =6168
+      vb.memory = 4096
     end
 
     install.dns.tld = 'vagrant'
