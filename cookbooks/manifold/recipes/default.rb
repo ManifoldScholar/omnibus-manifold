@@ -89,7 +89,6 @@ include_recipe "manifold::logrotate_config"
 # Setup the api env file
 manifold_source_dir = "/opt/manifold/embedded/src"
 
-# TODO: Handle HTTPS?
 port = node['manifold']['nginx']['listen_port']
 domain = node['manifold']['manifold-api']['manifold_host'] || "127.0.0.1"
 api_url_parts = ["http://"]

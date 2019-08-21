@@ -6,6 +6,7 @@ RAILS_ENV=<%= @api["environment"] %>
 RAILS_SECRET_KEY=<%= @api["secret_key_base"] %>
 
 DOMAIN=<%= @fqdn %>
+SSL_ENABLED=<%= @nginx["listen_https"] ? "true" : "false" %>;
 RAILS_REDIS_URL=redis://127.0.0.1:<%= @api["redis_port"] %>
 RAILS_ROOT=<%= @api["src"] %>
 RAILS_SERVER_LOG_DIR=<%= @api["log_directory"] %>
