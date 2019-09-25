@@ -119,6 +119,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     builder.vm.hostname = "ubuntu18-builder.omnibus-#{project_name}"
 
     builder.vm.provision :chef_solo do |chef|
+      chef.custom_config_path = "CustomConfiguration.chef"
+
       chef.json = {
         "omnibus" => {
           "build_user"  => "vagrant",
