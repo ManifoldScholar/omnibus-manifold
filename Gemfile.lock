@@ -8,17 +8,17 @@ GIT
 
 GIT
   remote: https://github.com/chef/omnibus
-  revision: bf006801aa98595383904ea65c098846d8c12ea4
+  revision: ac881b7f810218323eeb4f71af4a8a4db75c1c92
   specs:
-    omnibus (6.0.18)
+    omnibus (6.1.4)
       aws-sdk-s3 (~> 1)
-      chef-sugar (>= 3.3)
-      cleanroom (~> 1.0)
+      chef-cleanroom (~> 1.0)
+      chef-sugar-ng (>= 3.3)
       ffi-yajl (~> 2.2)
       license_scout (~> 1.0)
-      mixlib-shellout (~> 2.0)
+      mixlib-shellout (>= 2.0, < 4.0)
       mixlib-versioning
-      ohai (>= 13, < 15)
+      ohai (>= 13, < 16)
       pedump
       ruby-progressbar (~> 1.7)
       thor (~> 0.18)
@@ -39,21 +39,22 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     attr_lazy (0.0.2)
     awesome_print (1.8.0)
-    aws-eventstream (1.0.1)
-    aws-partitions (1.140.0)
-    aws-sdk-core (3.46.2)
-      aws-eventstream (~> 1.0)
+    aws-eventstream (1.0.3)
+    aws-partitions (1.218.0)
+    aws-sdk-core (3.68.0)
+      aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1.0)
-      aws-sigv4 (~> 1.0)
+      aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.13.0)
-      aws-sdk-core (~> 3, >= 3.39.0)
-      aws-sigv4 (~> 1.0)
-    aws-sdk-s3 (1.30.1)
-      aws-sdk-core (~> 3, >= 3.39.0)
+    aws-sdk-kms (1.24.0)
+      aws-sdk-core (~> 3, >= 3.61.1)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.48.0)
+      aws-sdk-core (~> 3, >= 3.61.1)
       aws-sdk-kms (~> 1)
-      aws-sigv4 (~> 1.0)
-    aws-sigv4 (1.0.3)
+      aws-sigv4 (~> 1.1)
+    aws-sigv4 (1.1.0)
+      aws-eventstream (~> 1.0, >= 1.0.2)
     berkshelf (6.3.4)
       buff-config (~> 2.0)
       buff-extensions (~> 2.0)
@@ -114,6 +115,7 @@ GEM
       specinfra (~> 2.10)
       syslog-logger (~> 1.6)
       uuidtools (~> 2.1.5)
+    chef-cleanroom (1.0.2)
     chef-config (13.12.3)
       addressable
       fuzzyurl
@@ -121,6 +123,7 @@ GEM
       mixlib-shellout (~> 2.0)
       tomlrb (~> 1.2)
     chef-sugar (5.0.0)
+    chef-sugar-ng (5.0.4)
     chef-zero (13.1.0)
       ffi-yajl (~> 2.2)
       hashie (>= 2.0, < 4.0)
@@ -171,7 +174,7 @@ GEM
     kitchen-vagrant (0.21.1)
       test-kitchen (~> 1.4)
     libyajl2 (1.2.0)
-    license_scout (1.0.22)
+    license_scout (1.0.25)
       ffi-yajl (~> 2.2)
       mixlib-shellout (~> 2.2)
       toml-rb (~> 1.0)
@@ -235,7 +238,7 @@ GEM
       progressbar
       zhexdump (>= 0.0.2)
     plist (3.5.0)
-    progressbar (1.10.0)
+    progressbar (1.10.1)
     proxifier (1.0.3)
     pry (0.12.2)
       coderay (~> 1.1.0)
@@ -283,7 +286,7 @@ GEM
     rspec_junit_formatter (0.2.3)
       builder (< 4)
       rspec-core (>= 2, < 4, != 2.12.0)
-    ruby-progressbar (1.10.0)
+    ruby-progressbar (1.10.1)
     rubyntlm (0.6.2)
     rubyzip (1.2.2)
     sawyer (0.8.1)
@@ -370,7 +373,7 @@ DEPENDENCIES
   git
   jenkins_api_client
   kitchen-vagrant (~> 0.18)
-  omnibus (~> 6.0.18)!
+  omnibus (~> 6.1.4)!
   omnibus-software!
   pry
   ptools
@@ -382,4 +385,4 @@ DEPENDENCIES
   test-kitchen (~> 1.4)
 
 BUNDLED WITH
-   1.16.3
+   1.17.2

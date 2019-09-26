@@ -42,7 +42,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     builder.vm.box = 'bento/ubuntu-16.04'
     builder.dns.tld = 'vagrant'
     builder.vm.hostname = "ubuntu16-builder.omnibus-#{project_name}"
+    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
     builder.vm.provision :chef_solo do |chef|
+      chef.custom_config_path = "CustomConfiguration.chef"
       chef.json = {
         "omnibus" => {
           "build_user"  => "vagrant",
@@ -55,8 +57,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "recipe[omnibus::default]"
       ]
     end
-
-    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-16.sh'
 
     builder.vm.network :private_network, ip: '10.42.1.2'
   end
@@ -81,6 +81,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     builder.vm.hostname = "centos7-builder.omnibus-#{project_name}"
 
     builder.vm.provision :chef_solo do |chef|
+      chef.custom_config_path = "CustomConfiguration.chef"
       chef.json = {
         "omnibus" => {
           "build_user"  => "vagrant",
@@ -117,10 +118,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     builder.dns.tld = 'vagrant'
 
     builder.vm.hostname = "ubuntu18-builder.omnibus-#{project_name}"
+    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-18.sh'
 
     builder.vm.provision :chef_solo do |chef|
       chef.custom_config_path = "CustomConfiguration.chef"
-
       chef.json = {
         "omnibus" => {
           "build_user"  => "vagrant",
@@ -133,8 +134,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "recipe[omnibus::default]"
       ]
     end
-
-    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-18.sh'
 
     builder.vm.network :private_network, ip: '10.42.1.6'
   end
