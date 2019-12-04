@@ -26,9 +26,6 @@ build do
   # Install Client node modules
   command "yarn install", cwd: client_dir, env: env
 
-  # Build source
-  command "yarn build", cwd: client_dir, env: env
-
   # Delete all gem archives
   command "find #{install_dir} -name '*.gem' -type f -print -delete"
 
