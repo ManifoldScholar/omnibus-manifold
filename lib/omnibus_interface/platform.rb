@@ -35,6 +35,7 @@ module OmnibusInterface
 
     def packages
       raise "Must have provided a #package_glob for #{name}" unless package_glob.present?
+      return [] unless File.exist?(env.packages_dir)
 
       env.packages_dir.find.select do |child|
         child.fnmatch package_glob
