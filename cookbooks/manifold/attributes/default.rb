@@ -370,7 +370,7 @@ default['manifold']['logrotate']['enable'] = true
 default['manifold']['logrotate']['ha'] = false
 default['manifold']['logrotate']['dir'] = "/var/opt/manifold/logrotate"
 default['manifold']['logrotate']['log_directory'] = "/var/log/manifold/logrotate"
-default['manifold']['logrotate']['services'] = %w{cable client clockwork nginx postgresql puma redis sidekiq}
+default['manifold']['logrotate']['services'] = %w{manifold-api cable client clockwork nginx postgresql puma redis sidekiq}
 default['manifold']['logrotate']['pre_sleep'] = 600 # sleep 10 minutes before rotating after start-up
 default['manifold']['logrotate']['post_sleep'] = 3000 # wait 50 minutes after rotating
 
