@@ -1,6 +1,7 @@
 name "manifold"
 default_version ReadVersion.('MANIFOLD_VERSION')
-source github: 'ManifoldScholar/manifold'
+source path: File.expand_path('../../manifold-src', __dir__)
+
 license :project_license
 skip_transitive_dependency_licensing true
 
