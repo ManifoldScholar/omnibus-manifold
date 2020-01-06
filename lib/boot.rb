@@ -9,20 +9,16 @@ require 'active_interaction'
 require 'active_support/all'
 require 'attr_lazy'
 require 'cleanroom'
-require 'commander'
 require 'dux'
 require 'git'
-require 'jenkins_api_client'
 require 'ohai'
 require 'pry'
 require 'ptools'
-require 'semantic'
 
 require 'dotenv/load'
 
 Ohai.config[:log_level] = :error
 
-require 'manifold'
 require 'omnibus_interface'
 
 OmnibusInterface.configure do
