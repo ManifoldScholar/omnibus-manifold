@@ -8,6 +8,15 @@ namespace :packages do
     end
   end
 
+  desc 'List all existing packages'
+  task :list => :environment do
+    out = {}
+    OmnibusInterface.project.each do |platform|
+      out[platform.name] = platform.packages.map { |f| File.basename(f) }
+    end
+    puts JSON.generate(out)
+  end
+
   OmnibusInterface.project.each do |platform|
     desc "Print the path to the latest #{platform.name} package"
     task platform.name => :environment do
