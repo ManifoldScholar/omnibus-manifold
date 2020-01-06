@@ -12,3 +12,4 @@ local
 .idea/*
 .DS_Store
 .env
+manifold-src
