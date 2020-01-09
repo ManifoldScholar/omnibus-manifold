@@ -14,10 +14,9 @@ conflict  "manifold"
 # and /opt/manifold on all other platforms
 install_dir "#{default_root}/#{name}"
 
-build_version do
-  source :git, from_dependency: 'manifold'
-end
-
+the_version = ReadVersion.('MANIFOLD_VERSION')
+the_version = the_version[1..-1] if the_version.start_with? "v"
+build_version the_version
 build_iteration ReadVersion.build_iteration
 
 # Creates required build directories
