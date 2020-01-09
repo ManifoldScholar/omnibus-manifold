@@ -77,7 +77,7 @@ module OmnibusInterface
     # @!group Executables / Scripts
 
     def is_old_tar(tar_path)
-      "#{root.join('bin', 'is_old_tar')} #{tar_path}"
+      "#{File.join('/vagrant/bin', 'is_old_tar')} #{tar_path}"
     end
 
     # @!endgroup
