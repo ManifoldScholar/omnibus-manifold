@@ -21,7 +21,7 @@ gem 'rb-readline'
 gem 'pry'
 gem 'ptools'
 gem 'rack', '>= 2.0.6'
-gem 'rubyzip', '>= 1.2.2', '< 2.0'
+gem 'rubyzip', '>= 1.2.2', '< 3.0'
 gem 'semantic'
 
 # This development group is installed by default when you run `bundle install`,
