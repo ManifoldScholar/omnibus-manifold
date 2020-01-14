@@ -4,10 +4,13 @@ license_file "BSDL"
 license_file "COPYING"
 license_file "LEGAL"
 skip_transitive_dependency_licensing true
-default_version "2.4.4"
+default_version "2.6.3"
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
+version("2.6.3") do
+  source sha512: "8503b86da60e38da4f1a1553b2570d4125c1823280e6fb6d07825a0e92dd7b628e13147ebde085702cbf5c5eddfe7fa5a2445996bc29164196a53bc917b02112"
+end
 version("2.4.4") do
   source sha512: "fa1f6d3a4856046d4f9c3e652be225ae67f3e9ff0d117b6ed327d58cfb717fb9b1ce81d06a3302e486e7da0b5f67b16341666ceb02a554a428d221d008263ed8"
 end
@@ -15,6 +18,7 @@ version("2.3.8") do
   source sha512: "43b02f2f9de6baf281f09a49fd07367127b4de1fb14473380d06bfa7667990d8f722ae2d33cf7d15b02f7e799515f21aebd308897c4c2a5461ebab4049d6c7ef"
 end
 
+dependency "ncurses" unless windows? || version.satisfies?('>= 2.1')
 dependency "ncurses" unless windows? || version.satisfies?('>= 2.1')
 dependency "zlib"
 dependency "openssl"
