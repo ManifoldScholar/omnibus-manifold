@@ -24,37 +24,21 @@
 # easily removed with remove-nodejs.
 #
 name "nodejs-binary"
-default_version "8.16.0"
+default_version "12.14.0"
 
 license "MIT"
 license_file "LICENSE"
 skip_transitive_dependency_licensing true
 
-version "8.15.0" do
+version "12.14.0" do
   source_hash = if ppc64le?
-                  "0a82cd81f13e59811c02dd12b7446fb2d5be86182dd9a6e96bf4fa32296a192a"
+                  "c00134ae7cee96b5c2782dabc1c3b778b3bc2cf8d53702c63d2e46966bb8cc39"
                 elsif ppc64?
-                  "ef9db73a1c84129b0549db54299569eb308e5992a1459fe27f5c4c8c7184b382"
+                  "b1c4db193ac9981d671a8b267d4d836dcdb20d9d0a9fa1b69150c349a5ac5b39"
                 elsif s390x?
-                  "c68bf544c3998cfa7803811e3c03ec74077a5a57c15ef487ff847c395c6a35fc"
-                elsif osx?
-                  "a393971136408f837fbc0f7d71a63754f91cfb1851d48bd612d8219eb61956f1"
+                  "82458edb46ef0ca410c4c21b0a002ee1098a3cc422e3cdf032aa96c9ed49425e"
                 else
-                  "b391450e0fead11f61f119ed26c713180cfe64b363cd945bac229130dfab64fa"
-                end
-  source sha256: source_hash
-end
-version "8.16.0" do
-  source_hash = if ppc64le?
-                  "0a82cd81f13e59811c02dd12b7446fb2d5be86182dd9a6e96bf4fa32296a192a"
-                elsif ppc64?
-                  "ef9db73a1c84129b0549db54299569eb308e5992a1459fe27f5c4c8c7184b382"
-                elsif s390x?
-                  "c68bf544c3998cfa7803811e3c03ec74077a5a57c15ef487ff847c395c6a35fc"
-                elsif osx?
-                  "a393971136408f837fbc0f7d71a63754f91cfb1851d48bd612d8219eb61956f1"
-                else
-                  "b391450e0fead11f61f119ed26c713180cfe64b363cd945bac229130dfab64fa"
+                  "52207f643ab0fba66d5189a51aac280c4834c81f24a7297446896386ec93a5ed"
                 end
   source sha256: source_hash
 end
