@@ -4,4 +4,4 @@ cd <%= @options[:rails_src] %>
 exec 2>&1
 exec chpst -e <%= @options[:static_etc_dir] %>/env -P \
 -U <%= @options[:user] %> -u <%= @options[:user] %> \
-<%= @options[:rails_src] %>/bin/clockwork clock.rb
+<%= @options[:rails_src] %>/bin/zhong zhong.rb
