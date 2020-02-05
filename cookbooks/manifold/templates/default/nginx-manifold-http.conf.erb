@@ -108,6 +108,9 @@ server {
 
   <% if @puma_enabled %>
   location /api {
+    location /api/static {
+      root <%= ManifoldApi.public_path %>;
+    }
     proxy_read_timeout                <%= @proxy_read_timeout %>;
     proxy_connect_timeout             <%= @proxy_connect_timeout %>;
     proxy_set_header                  Host $host;
@@ -116,7 +119,7 @@ server {
     proxy_pass                        http://manifold_puma;
   }
   location /system {
-    root <%= ManifoldApi.system_path %>;
+    root <%= ManifoldApi.public_path %>;
   }
   location /auth {
     proxy_read_timeout                <%= @proxy_read_timeout %>;

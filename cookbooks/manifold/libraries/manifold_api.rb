@@ -58,7 +58,7 @@ module ManifoldApi
       conditionally_disable_manifold_api_services
     end
 
-    def system_path
+    def public_path
       "#{Manifold['node']['package']['install-dir']}/embedded/src/api/public"
     end
 
