@@ -10,6 +10,8 @@ SSL_ENABLED=<%= @nginx["listen_https"] ? "true" : "false" %>
 RAILS_REDIS_URL=redis://127.0.0.1:<%= @api["redis_port"] %>
 RAILS_ROOT=<%= @api["src"] %>
 RAILS_SERVER_LOG_DIR=<%= @api["log_directory"] %>
+RAILS_DB_HOST=<%= single_quote(@api["db_host"]) %>
+RAILS_DB_PORT=<%= single_quote(@api["db_port"]) %>
 RAILS_DB_PASS=<%= single_quote(@api["db_password"]) %>
 RAILS_DB_USER=<%= single_quote(@api["db_username"]) %>
 RAILS_DB_NAME=<%= @api["db_database"] %>

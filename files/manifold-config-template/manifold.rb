@@ -58,18 +58,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### Manifold database settings
 ###! **Only needed if you use an external database.**
-# manifold_api['db_adapter'] = "postgresql"
-# manifold_api['db_encoding'] = "unicode"
-# manifold_api['db_collation'] = nil
 # manifold_api['db_database'] = "manifold_production"
-# manifold_api['db_pool'] = 10
 # manifold_api['db_username'] = "manifold"
 # manifold_api['db_password'] = nil
 # manifold_api['db_host'] = nil
 # manifold_api['db_port'] = 5432
-# manifold_api['db_socket'] = nil
-# manifold_api['db_sslmode'] = nil
-# manifold_api['db_sslrootcert'] = nil
 
 ### Manifold Redis settings
 ###! Connect to your own Redis instance
