@@ -8,7 +8,7 @@ gem 'omnibus', '~> 6.1.4', git: 'https://github.com/chef/omnibus'
 gem 'omnibus-software', github: 'opscode/omnibus-software'
 
 gem 'active_interaction'
-gem 'activesupport', '~> 5.2', require: false
+gem 'activesupport', '~> 6.0', require: false
 gem 'attr_lazy'
 gem 'cleanroom'
 gem 'commander'
