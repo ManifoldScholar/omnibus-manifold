@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Install omnibus
-gem 'omnibus', '~> 6.1.4', git: 'https://github.com/chef/omnibus'
+gem 'omnibus', '~> 7.0', git: 'https://github.com/chef/omnibus'
 
 # Use Chef's software definitions. It is recommended that you write your own
 # software definitions, but you can clone/fork Chef's to get you started.
@@ -15,7 +15,6 @@ gem 'commander'
 gem 'dotenv'
 gem 'dux'
 gem 'git'
-gem 'jenkins_api_client'
 gem 'rake'
 gem 'rb-readline'
 gem 'pry'
