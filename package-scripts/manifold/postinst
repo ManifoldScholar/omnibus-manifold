@@ -5,39 +5,82 @@
 #
 DEST_DIR=/opt/manifold
 EXTERNAL_URL=http://$(hostname -f)
+# Check if we have colors enabled
+tput=$(which tput)
+if [ -n "$tput" ]; then
+  ncolors=$($tput colors)
+  if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+    RED="$(tput setaf 1)"
+    GREEN="$(tput setaf 2)"
+    YELLOW="$(tput setaf 3)"
+    GRAY="$(tput setaf 244)"
+    NOCOLOR="$(tput sgr0)"
+  else
+    RED=""
+    GREEN=""
+    YELLOW=""
+    NOCOLOR=""
+    GRAY=""
+  fi
+fi
 
-notify()
-{
-  echo "manifold: $1"
-}
+VERSION_FILE=/opt/manifold/embedded/src/MANIFOLD_VERSION
+if [ -e $VERSION_FILE ] ; then
+  VERSION=$(<$VERSION_FILE)
+else
+  VERSION=""
+fi
 
 
 manifold_ascii()
 {
-cat <<BANNER
-Manifold Scholarship
+cat <<'BANNER'
+  ╦
+  ░░░╬φ╦,                                               ,╓╤
+  ░░░╬░░░░░╬╦╦,                                  ,╓╦φ╣╬░░░░
+  ░░░    "╚╬░░░░╬▒╦╦,                     ,╓╦φ╬╬░░░░░╬╩╙"
+  ░░░         `╙╩╬░░░░╬φ╦╖         ,╓╦φ╣╬░░░░░╬╩╙"
+  ░░░               "╙╩░░░░░╬╦╦φ╣╬░░░░░╬╩╙"            ,╔╦φ
+  ░░░                ,╓╦╬░░░░░░░░░░░░,          ,╓╦φ╬╬░░░░░
+  ░░░         ,╓╦φ▒╬░░░░░╬╩╨╠░░░╙╩╬░░░░╬▒╦╦╦φ╬╬░░░░░╩╩╙`
+  ░░░   ,╦φ╣╬░░░░░╬╩╨"      ]░░░     "╙╩░░░░░░░░░
+  ░░░╬░░░░░░╩╨"            ,╠░░░           "╚╬░░░░░╬╦╦,╔╦ê╬
+  ░░╬╩╩"            ,╓╦φ╣╬░░░░░░                `╙╩╬░░░░░░░
+             ,╓╦φ╣╬░░░░░╬╩╙"╠░░░                      `║░░░
+      ,╓╦φ╣╬░░░░░╬╩╙"       ]░░░                       ║░░░
+  φ╣╬░░░░░╬╩╨"            ,╔╣░░░                       ║░░░
+  ░╬╩╙`            ,╓╦φ╬╬░░░░░░░                       ║░░░
+            ,╓╦φ╬╬░░░░░╩╩╙` ╠░░░                       ║░░░
+     ,╓╦φ╣╬░░░░░╩╩"`        ]░░░                       ║░░░
+  ╣╬░░░░░╩╩"`            ,╔╦╣░░░                       ║░░░
+  ╬╩╙`            ,╔╦φ╬░░░░░░░░░                       ║░░░
+           ,╔╦φ╬╬░░░░░╩╩"   ]░░░                       ║░░░
+    ,╔╦φ╣░░░░░░╩╩"`         ]░░░                       ║░░░
+  ░░░░░░╩╩"`            ,╦╦╣╬░░░╣╦╦,                   ║░░░
+  ╩"`            ,╦╦╣╬░░░░░╬╩╩╙╩╬░░░░╬▒╦╖              ║░░░
+         ,,╦╦▒╬░░░░░╬╩╙"           `╙╩╬░░░░╬φ╦╓        ║░░░
+   ,╦╦ê╣░░░░░░╩╨"                        "╚╬░░░░░╣╦╦,  ║░░░
+  ░░░░░╩╩"                                    `╙╩╬░░░░╬╬░░░
+  "                                                 `╙╩╬░░░
+                                                          "
 BANNER
 }
 
+border()
+{
+    title="| $1 |"
+    edge=$(echo "$title" | sed 's/./-/g')
+    echo "$edge"
+    echo "$title"
+    echo "$edge"
+}
 print_banner()
 {
-    # Check if we have colors enabled
-    tput=$(which tput)
-    if [ -n "$tput" ]; then
-      ncolors=$($tput colors)
-      if [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
-        RED="$(tput setaf 1)"
-        YELLOW="$(tput setaf 3)"
-        NOCOLOR="$(tput sgr0)"
-      else
-        RED=""
-        YELLOW=""
-        NOCOLOR=""
-      fi
-    fi
+
 
     echo ""
-    echo "$RED"
+    echo "$GREEN"
+    echo "                  Manifold Scholarship $VERSION"
     echo "$(manifold_ascii)"
     echo "$NOCOLOR"
     echo ""
@@ -56,21 +99,40 @@ create_config_template()
   fi
 }
 
+current_version()
+{
+  VERSION=/opt/manifold/embedded/src/MANIFOLD_VERSION
+  if [ -e $VERSION ] ; then
+    value=$(<$VERSION)
+    return "$value"
+  fi
+}
+
 print_welcome()
 {
   print_banner
-  notify "Thank you for installing Manifold!"
-  notify "To configure and start Manifold, RUN THE FOLLOWING COMMAND:"
-  echo ""
+  echo "To configure and start Manifold, run the following command:"
+  echo "$GRAY"
   echo "sudo manifold-ctl reconfigure"
-  echo ""
-  notify "Manifold should be reachable at ${EXTERNAL_URL}"
-  notify "Otherwise configure Manifold for your system by editing /etc/manifold/manifold.rb file"
-  notify "And running reconfigure again."
-  notify
+  echo "$NOCOLOR"
+
+  if ! test -z "$EXTERNAL_URL"; then
+    echo "Manifold should be reachable at:"
+    echo "$GRAY"
+    echo "$EXTERNAL_URL"
+    echo "$NOCOLOR"
+  fi
+
+  echo "Configure Manifold for your system by editing this file and running reconfigure:"
+  echo "$GRAY"
+  echo "/etc/manifold/manifold.rb"
+  echo "$NOCOLOR"
 }
 
 create_config_template
 print_welcome
-${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
+
+if test -f "${DEST_DIR}/embedded/bin/symlink_ctl_cmds"; then
+  ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
+fi
 
