@@ -162,21 +162,15 @@ server {
       break;
     }
   }
-
-# TODO: Make 500 error work correctly.
-#  location = /50x.html {
-#    root <%= @current_dir %>/client/dist/build/client/build/static;
-#  }
-
-  <% end %>
-
-  <% errors = Nginx.parse_error_pages %>
-  <% errors.each do |err, location| %>
-  error_page <%= err %> /<%= location %>;
-  <% end %>
-  location ~ ^/(<%= errors.keys.join('|') %>)(-custom)?\.html$ {
-    internal;
+  error_page 500 502 503 504 /50x.html;
+  location = /50x.html {
+    root <%= ManifoldClient.public_path %>/static;
   }
+
+  <% end %>
+
   <%= @custom_manifold_server_config %>
 
 }
+
+
