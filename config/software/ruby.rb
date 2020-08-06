@@ -8,6 +8,9 @@ default_version "2.6.3"
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 
+version("2.6.6") do
+  source sha512: "7c54aad974d13c140df0a7209cc111dada10ad402126271051222adb7f2b5053997353367f2cddf6c0336f67357f831aeab9f236851153c0db0d2014bf3e0614"
+end
 version("2.6.3") do
   source sha512: "8503b86da60e38da4f1a1553b2570d4125c1823280e6fb6d07825a0e92dd7b628e13147ebde085702cbf5c5eddfe7fa5a2445996bc29164196a53bc917b02112"
 end
