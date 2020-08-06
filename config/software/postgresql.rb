@@ -15,7 +15,7 @@
 #
 
 name "postgresql"
-default_version "9.6.12"
+default_version "9.6.18"
 
 license "PostgreSQL"
 license_file "COPYRIGHT"
@@ -33,6 +33,9 @@ else
   dependency "libuuid"
 end
 
+version "9.6.18" do
+  source sha256: "517ec282b785e6d22f360c30ba0c5e2a506fca5ca07dcc545427511d94c89999"
+end
 version "9.6.12" do
   source sha256: "2e8c8446ba94767bda8a26cf5a2152bf0ae68a86aaebf894132a763084579d84"
 end
