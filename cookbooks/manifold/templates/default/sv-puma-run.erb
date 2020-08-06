@@ -3,7 +3,7 @@
 cd <%= @options[:rails_home] %>/working
 
 exec 2>&1
-
+ulimit -n 10240
 exec chpst -e <%= @options[:static_etc_dir] %>/env -P \
 -U <%= @options[:user] %> -u <%= @options[:user] %> \
 <%= @options[:source] %>/bin/puma \

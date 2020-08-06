@@ -3,6 +3,8 @@
 cd <%= @options[:client_src] %>
 exec 2>&1
 
+ulimit -n 10240
+
 exec chpst -P \
 -U <%= @options[:user] %> -u <%= @options[:user] %> \
 /opt/manifold/embedded/nodejs/bin/node dist/manifold/ssr/manifold-client-ssr.js
