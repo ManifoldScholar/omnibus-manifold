@@ -31,6 +31,9 @@ gzip_proxied <%= @gzip_proxied %>;
 gzip_types <%= @gzip_types.join(' ') %>;
 
 include /opt/manifold/embedded/conf/mime.types;
+types {
+    application/epub+zip epub;
+}
 
 proxy_cache_path <%= @proxy_cache_path %>;
 proxy_cache <%= @proxy_cache %>;
