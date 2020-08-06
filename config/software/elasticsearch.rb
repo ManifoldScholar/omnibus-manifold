@@ -15,7 +15,7 @@
 #
 
 name "elasticsearch"
-default_version "5.6.15"
+default_version "5.6.16"
 
 dependency "jre"
 
@@ -26,10 +26,10 @@ skip_transitive_dependency_licensing true
 source url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-#{version}.tar.gz"
 relative_path "elasticsearch-#{version}"
 
-version "5.6.15" do
+version "5.6.16" do
   # Newer versions appear to live in an alternative location that does
   # not also contain the older versions. We can make this default when we drop 2.x.
-  source sha256: "ac91825bc5f7facaaa4f3358267abca0717e986c7ef3c19c5267214a8c5c5032"
+  source sha256: "6b035a59337d571ab70cea72cc55225c027ad142fbb07fd8984e54261657c77f"
 end
 
 target_path = "#{install_dir}/embedded/elasticsearch"
