@@ -20,14 +20,6 @@ upstream manifold_client {
 }
 <% end %>
 
-<% if @listen_https && @redirect_http_to_https %>
-server {
-  listen <%= @listen_port %>;
-  server_name <%= @fqdn %> localhost 127.0.0.1;
-  rewrite     ^   https://$server_name$request_uri? permanent;
-}
-<% end %>
-
 server {
 
   ## Individual nginx logs for this Manifold vhost
@@ -37,16 +29,31 @@ server {
   ## Document root defaults to the client directory application's build dir.
   root <%= ManifoldClient.public_path %>;
 
-  <% unless @listen_https && @redirect_http_to_https %>
   <% @listen_addresses.each do |listen_address| %>
   listen <%= listen_address %>:<%= @listen_port %>;
   <% end %>
-  <% end %>
 
   <% if @listen_https %>
+
   <% @listen_addresses.each do |listen_address| %>
-  listen <%= listen_address %>:443 ssl;
+  listen <%= listen_address %>:443 default_server ssl;
   <% end %>
+
+  <% if @redirect_http_to_https && @listen_https %>
+  if ($scheme = http ) {
+    set $ssl_redirect_match A;
+  }
+
+  ## Loopback requests from the client service can be over HTTP
+  if ($remote_addr != 127.0.0.1) {
+    set $ssl_redirect_match  "${ssl_redirect_match}B";
+  }
+
+  if ($ssl_redirect_match = AB ) {
+    return 301 https://$server_name$request_uri;
+  }
+  <% end %>
+
   <% end %>
 
   server_name <%= @fqdn %> localhost 127.0.0.1;
