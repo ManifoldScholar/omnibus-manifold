@@ -3,8 +3,8 @@
 cd <%= node['manifold'][@options[:rails_app]]['src'] %>
 
 exec 2>&1
-# TODO: Figure out sidekiq config
-# -C /opt/manifold/embedded/src/<%= @options[:src_dir] %>/config/sidekiq_queues.yml \
+
+ulimit -n 10240
 
 exec chpst -e /opt/manifold/etc/manifold/<%= @options[:src_dir] %>/env -P \
 -U <%= @options[:user] %> -u <%= @options[:user] %> \
