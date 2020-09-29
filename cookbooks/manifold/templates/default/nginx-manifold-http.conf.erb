@@ -71,7 +71,6 @@ server {
 
   ## SSL Configuration
   <% if @listen_https %>
-
   ssl_certificate <%= @ssl_certificate %>;
   ssl_certificate_key <%= @ssl_certificate_key %>;
   ssl_ciphers '<%= @ssl_ciphers %>';
@@ -79,41 +78,36 @@ server {
   ssl_prefer_server_ciphers <%= @ssl_prefer_server_ciphers %>;
   ssl_session_cache  <%= @ssl_session_cache %>;
   ssl_session_timeout  <%= @ssl_session_timeout %>;
-
   <% if @ssl_client_certificate %>
   ssl_client_certificate <%= @ssl_client_certificate %>;
   <% end %>
-
   <% if @ssl_trusted_certificate %>
   ssl_trusted_certificate <%= @ssl_trusted_certificate %>;
   <% end %>
-
   <% if @ssl_verify_client %>
   ssl_verify_client <%= @ssl_verify_client %>;
   ssl_verify_depth <%= @ssl_verify_depth %>;
   <% end %>
-
   <% if @ssl_dhparam %>
   ssl_dhparam <%= @ssl_dhparam %>;
   <% end %>
-
   <% end %>
+ <% if @real_ip_header %>
 
-  <% if @real_ip_header %>
   ## Real IP Module Config
   ## http://nginx.org/en/docs/http/ngx_http_realip_module.html
   real_ip_header <%= @real_ip_header %>;
-  <% end %>
 
-  <% if @real_ip_recursive %>
+  <% end %>
+ <% if @real_ip_recursive %>
   real_ip_recursive <%= @real_ip_recursive %>;
-  <% end %>
 
+  <% end %>
   <% @real_ip_trusted_addresses.each do |trusted_address| %>
   set_real_ip_from <%= trusted_address %>;
   <% end %>
-
   <% if @puma_enabled %>
+
   location /api {
     location /api/static {
       root <%= ManifoldApi.public_path %>;
@@ -123,11 +117,20 @@ server {
     proxy_set_header                  Host $host;
     proxy_set_header                  X-Forwarded-For $remote_addr;
     proxy_set_header                  X-Forwarded-Proto $scheme;
+    proxy_set_header                  X-Sendfile-Type X-Accel-Redirect;
+    proxy_set_header                  X-Accel-Mapping <%= ManifoldApi.public_path %>/=/__send_file_accel/;
     proxy_pass                        http://manifold_puma;
   }
+
+  location /__send_file_accel {
+    internal;
+    alias <%= ManifoldApi.public_path %>;
+  }
+
   location /system {
     root <%= ManifoldApi.public_path %>;
   }
+
   location /auth {
     proxy_read_timeout                <%= @proxy_read_timeout %>;
     proxy_connect_timeout             <%= @proxy_connect_timeout %>;
