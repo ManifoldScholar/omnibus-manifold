@@ -55,6 +55,7 @@ default['manifold']['manifold-api']['log_directory'] = "/var/log/manifold/api"
 default['manifold']['manifold-api']['environment'] = 'production'
 default['manifold']['manifold-api']['base_env'] = {
   'SIDEKIQ_MEMORY_KILLER_MAX_RSS' => '1000000',
+  'MALLOC_ARENA_MAX' => '2',
   'BUNDLE_GEMFILE' => "#{node['package']['install-dir']}/embedded/src/api/Gemfile",
   'PATH' => "#{node['package']['install-dir']}/bin:#{node['package']['install-dir']}/embedded/bin:/usr/local/bin:/bin:/usr/bin",
 }
@@ -110,7 +111,7 @@ default['manifold']['manifold-api']['elasticsearch_port'] = 3036
 default['manifold']['manifold-api']['trusted_certs_dir'] = "/etc/manifold/trusted-certs"
 
 ####
-# Puma
+# API Puma
 ####
 default['manifold']['puma']['enable'] = true
 default['manifold']['puma']['log_directory'] = "/var/log/manifold/puma"
@@ -119,8 +120,9 @@ default['manifold']['puma']['socket'] = '/var/opt/manifold/api/sockets/puma/api.
 default['manifold']['puma']['listen'] = '127.0.0.1'
 default['manifold']['puma']['port'] = 3031
 default['manifold']['puma']['pidfile'] = "#{node['package']['install-dir']}/var/puma/puma.pid"
+default['manifold']['puma']['statefile'] = "#{node['package']['install-dir']}/var/puma/puma.state"
 default['manifold']['puma']['rackup'] = "config.ru"
-
+default['manifold']['puma']['worker_count'] = 1
 
 ####
 # Cable
@@ -132,8 +134,9 @@ default['manifold']['cable']['socket'] = '/var/opt/manifold/api/sockets/cable/ca
 default['manifold']['cable']['listen'] = '127.0.0.1'
 default['manifold']['cable']['port'] = 3032
 default['manifold']['cable']['pidfile'] = "#{node['package']['install-dir']}/var/puma/cable.pid"
+default['manifold']['cable']['statefile'] = "#{node['package']['install-dir']}/var/puma/cable.state"
 default['manifold']['cable']['rackup'] = "cable/config.ru"
-
+default['manifold']['cable']['worker_count'] = 1
 
 ####
 # Clockwork

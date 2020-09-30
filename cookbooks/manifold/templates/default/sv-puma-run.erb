@@ -2,11 +2,18 @@
 
 cd <%= @options[:rails_home] %>/working
 
+export PUMA_APPLICATION=<%= @options[:service] == "cable" ? "cable" : "api" %>
+export <%= @options[:env_prefix] %>_SOCKET=<%= @options[:puma_listen_socket] %>
+export <%= @options[:env_prefix] %>_PIDFILE=<%= @options[:puma_pidfile] %>
+export <%= @options[:env_prefix] %>_STATEFILE=<%= @options[:puma_statefile] %>
+export <%= @options[:env_prefix] %>_BIND_IP=<%= @options[:puma_listen_address] %>
+export WORKER_COUNT=<%= @options[:puma_worker_count] %>
+
 exec 2>&1
 ulimit -n 10240
 exec chpst -e <%= @options[:static_etc_dir] %>/env -P \
 -U <%= @options[:user] %> -u <%= @options[:user] %> \
 <%= @options[:source] %>/bin/puma \
--C <%= @options[:config] %> \
+-C <%= @options[:source] %>/config/puma.rb \
 --dir <%= @options[:source] %> \
-<%= @options[:rackup] %>
+<%= @options[:puma_rackup] %>

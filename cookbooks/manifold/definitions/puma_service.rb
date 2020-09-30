@@ -1,21 +1,23 @@
 define :puma_service, :rails_app => nil, :user => nil do
 
-  config_template = params[:config_template]
   rails_app = params[:rails_app]
-  static_etc_dir = params[:static_etc_dir ]
   rails_home = node['manifold'][rails_app]['dir']
   rails_src= node['manifold'][rails_app]['src']
+  static_etc_dir = params[:static_etc_dir ]
   svc = params[:name]
   user = params[:user]
   svc_group = node[:platform] == "mac_os_x" ? "wheel" : "root"
+
   puma_dir = node['manifold'][svc]['dir']
   puma_rackup = node['manifold'][svc]['rackup']
-  puma_etc_dir = File.join(rails_home, "etc")
   puma_pidfile = node['manifold'][svc]['pidfile']
+  puma_statefile = node['manifold'][svc]['statefile']
   puma_log_dir = node['manifold'][svc]['log_directory']
   puma_listen_socket = node['manifold'][svc]['socket']
+  puma_listen_address = node['manifold'][svc]['listen']
+  puma_worker_count = node['manifold'][svc]['worker_count']
   puma_socket_dir = File.dirname(puma_listen_socket)
-  puma_rb = File.join(puma_etc_dir, "#{svc}/#{svc}.rb")
+  puma_application = svc == "cable" ? "cable" : "api"
 
   [
     puma_log_dir,
@@ -35,13 +37,6 @@ define :puma_service, :rails_app => nil, :user => nil do
     recursive true
   end
 
-  puma_config puma_rb do
-    dir puma_dir
-    config_template config_template
-    socket puma_listen_socket
-    pid puma_pidfile
-  end
-
   runit_service svc do
     down node['manifold'][svc]['ha']
     group svc_group
@@ -50,13 +45,19 @@ define :puma_service, :rails_app => nil, :user => nil do
     options({
       :service => svc,
       :rails_home => rails_home,
+      :env_prefix => puma_application == "cable" ? "API_CABLE" : "API",
+      :puma_dir => puma_dir,
+      :puma_rackup => puma_rackup,
+      :puma_pidfile => puma_pidfile,
+      :puma_statefile => puma_statefile,
+      :puma_listen_socket => puma_listen_socket,
+      :puma_listen_address => puma_listen_address,
+      :puma_worker_count => puma_worker_count,
       :static_etc_dir => static_etc_dir,
       :user => user,
-      :config => puma_rb,
       :source => rails_src,
       :rails_app => rails_app,
-      :log_directory => puma_log_dir,
-      :rackup => puma_rackup
+      :log_directory => puma_log_dir
     }.merge(params))
     log_options node['manifold']['logging'].to_hash.merge(node['manifold'][svc].to_hash)
   end
