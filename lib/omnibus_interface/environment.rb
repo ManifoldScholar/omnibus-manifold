@@ -27,6 +27,8 @@ module OmnibusInterface
         :ubuntu16
       elsif ubuntu18?
         :ubuntu18
+      elsif ubuntu20?
+        :ubuntu20
       elsif centos7?
         :centos7
       elsif macos?
@@ -56,6 +58,10 @@ module OmnibusInterface
 
     def ubuntu18?
       ubuntu? && ohai_platform_version == '18.04'
+    end
+
+    def ubuntu20?
+      ubuntu? && ohai_platform_version == '20.04'
     end
 
     # @!group Ohai methods

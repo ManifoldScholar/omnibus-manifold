@@ -157,6 +157,47 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     install.vm.network :private_network, ip: '10.42.1.7'
   end
 
+  config.vm.define 'ubuntu20-builder' do |builder|
+    builder.vm.box = 'bento/ubuntu-20.04'
+
+    builder.dns.tld = 'vagrant'
+
+    builder.vm.hostname = "ubuntu20-builder.omnibus-#{project_name}"
+    builder.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-20.sh'
+
+    builder.vm.provision :chef_solo do |chef|
+      chef.custom_config_path = "CustomConfiguration.chef"
+      chef.json = {
+        "omnibus" => {
+          "build_user"  => "vagrant",
+          "build_dir"   => guest_project_path,
+          "install_dir" => "/opt/#{project_name}"
+        }
+      }
+
+      chef.run_list = [
+        "recipe[omnibus::default]"
+      ]
+    end
+
+    builder.vm.network :private_network, ip: '10.42.1.8'
+  end
+
+  config.vm.define 'ubuntu20-install' do |install|
+    install.vm.box = 'bento/ubuntu-20.04'
+
+    config.vm.provider :virtualbox do |vb|
+      vb.memory = 4096
+    end
+
+    install.dns.tld = 'vagrant'
+
+    install.vm.hostname = "ubuntu28-install.omnibus-#{project_name}"
+
+    install.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-20.sh'
+
+    install.vm.network :private_network, ip: '10.42.1.9'
+  end
 
   # Enable the berkshelf-vagrant plugin
   config.berkshelf.enabled    = true

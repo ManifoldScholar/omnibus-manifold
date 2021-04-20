@@ -41,6 +41,15 @@ OmnibusInterface.configure do
       virtualized!
     end
 
+    platform 'ubuntu20' do
+      package_glob 'ubuntu20/*.deb'
+
+      uses_system_tar!
+
+      virtualized!
+    end
+
+
     platform 'centos7' do
       package_glob 'centos7/*.el7.x86_64.rpm'
 
