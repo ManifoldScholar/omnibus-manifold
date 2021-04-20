@@ -28,6 +28,9 @@ project_name        = 'manifold'
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.dns.tld = 'vagrant'
 
+  config.omnibus.install_url = "https://omnitruck.chef.io/install.sh"
+  config.omnibus.chef_version = :latest
+
   config.vm.provider :virtualbox do |vb|
     vb.customize [
       "modifyvm", :id,
@@ -154,7 +157,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     install.vm.network :private_network, ip: '10.42.1.7'
   end
 
-  config.omnibus.chef_version = :latest
 
   # Enable the berkshelf-vagrant plugin
   config.berkshelf.enabled    = true
