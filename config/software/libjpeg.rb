@@ -1,13 +1,9 @@
 name "libjpeg"
 
-default_version '8d'
+default_version '9d'
 
-# license "BSD-3-Clause"
-# license_file "LICENSE"
-# skip_transitive_dependency_licensing true
-
-version '8d' do
-  source sha256: "00029b1473f0f0ea72fbca3230e8cb25797fbb27e58ae2e46bb8bf5a806fe0b3"
+version '9d' do
+  source sha512: "6515a6f617fc9da7a3d7b4aecc7d78c4ee76159d36309050b7bf9f9672b4e29c2f34b1f4c3d7d65d7f6e2c104c49f53dd2e3b45eac22b1576d2cc54503faf333"
 end
 
 source url: "http://www.ijg.org/files/jpegsrc.v#{version}.tar.gz"

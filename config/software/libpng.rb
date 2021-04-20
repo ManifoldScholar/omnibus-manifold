@@ -1,6 +1,6 @@
 name "libpng"
 
-default_version '1.6.28'
+default_version '1.6.37'
 
 license "libpng"
 license_file "LICENSE"
@@ -8,8 +8,8 @@ skip_transitive_dependency_licensing true
 
 dependency "config_guess"
 
-version "1.6.28" do
-  source md5: '425354f86c392318d31aedca71019372'
+version "1.6.37" do
+  source sha512: '59e8c1059013497ae616a14c3abbe239322d3873c6ded0912403fc62fb260561768230b6ab997e2cccc3b868c09f539fd13635616b9fa0dd6279a3f63ec7e074'
 end
 
 source url: "http://downloads.sourceforge.net/libpng/libpng-#{version}.tar.xz"

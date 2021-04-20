@@ -1,5 +1,5 @@
 name "chef-zero"
-default_version "5.3.2"
+default_version "15.0.4"
 
 license "Apache-2.0"
 license_file "https://raw.githubusercontent.com/chef/chef-zero/v#{version}/LICENSE"
@@ -12,6 +12,5 @@ build do
 
   gem "install chef-zero" \
       " --version '#{version}'" \
-      " --bindir '#{install_dir}/embedded/bin'" \
-      " --no-ri --no-rdoc", env: env
+      " --bindir '#{install_dir}/embedded/bin'", env: env
 end

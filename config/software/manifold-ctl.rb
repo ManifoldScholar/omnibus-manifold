@@ -5,9 +5,6 @@ name "manifold-ctl"
 license :project_license
 skip_transitive_dependency_licensing true
 
-dependency "omnibus-ctl"
-dependency "runit"
-
 source :path => File.expand_path("files/manifold-ctl-commands", Omnibus::Config.project_root)
 
 build do

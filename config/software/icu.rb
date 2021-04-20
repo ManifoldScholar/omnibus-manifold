@@ -15,14 +15,10 @@
 #
 
 name "icu"
-default_version "4.8.2"
+default_version "69.1"
 
-# source url: "http://download.icu-project.org/files/icu4c/4.8.1.1/icu4c-4_8_1_1-src.tgz",
-#        md5: "ea93970a0275be6b42f56953cd332c17"
-
-source url: "https://github.com/unicode-org/icu/releases/download/release-4-8-2/icu4c-4_8_2-src.tgz",
-       md5: "90b11cd2a34bcf83483eabcf6ed100f6"
-
+source url: "https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz",
+       sha512: "d4aeb781715144ea6e3c6b98df5bbe0490bfa3175221a1d667f3e6851b7bd4a638fa4a37d4a921ccb31f02b5d15a6dded9464d98051964a86f7b1cde0ff0aab7"
 
 relative_path "icu/source"
 

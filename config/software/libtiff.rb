@@ -1,14 +1,14 @@
 name "libtiff"
 
-default_version '4.0.7'
+default_version '4.2.0'
 
 dependency "config_guess"
 
 license 'MIT'
 license_file 'COPYRIGHT'
 
-version '4.0.7' do
-  source md5: '77ae928d2c6b7fb46a21c3a29325157b'
+version '4.2.0' do
+  source sha512: 'd7d42e6e6dbda9604c638f28e6cfa4705191a4e8ea276d18031d50dbab0931ac91141e57a2cf294124487f1a2e6dfcb9be62431c1b69de5acf4d0e632f3322e5'
 end
 
 source url: "http://download.osgeo.org/libtiff/tiff-#{version}.tar.gz"

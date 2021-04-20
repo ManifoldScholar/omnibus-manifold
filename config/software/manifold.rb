@@ -5,9 +5,6 @@ source path: File.expand_path('../../manifold-src', __dir__)
 license :project_license
 skip_transitive_dependency_licensing true
 
-dependency "yarn"
-dependency "nodejs-binary"
-
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   # Yarn will need node, so we'll add it to the path.
@@ -31,7 +28,7 @@ build do
   command "find #{install_dir} -name '*.gem' -type f -print -delete"
 
   # Delete all docs
-  command "find #{install_dir}/embedded/lib/ruby/gems -name 'doc' -type d -print -exec rm -r {} +"
+  #  command "find #{install_dir}/embedded/lib/ruby/gems -name 'doc' -type d -print -exec rm -r {} +"
 
   # Because db/schema.rb can be modified after installation
   copy 'api/db/schema.rb', 'api/db/schema.rb.bundled'

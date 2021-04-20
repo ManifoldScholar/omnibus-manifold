@@ -1,5 +1,5 @@
 name "imagemagick"
-default_version "7.0.6-9"
+default_version "7.0.11-8"
 
 license "ImageMagick"
 license_file "LICENSE"
@@ -15,11 +15,11 @@ dependency "libtiff"
 dependency "libxml2"
 dependency "zlib"
 
-version '7.0.6-9' do
-  source sha256: '74e25977aa0ea8f0fc5ca1e994a649d3660b82634f534725e46cea618a098377'
+version '7.0.11-8' do
+  source sha512: '069cd3e8b46e7da75a860bb6f03a23a24acde75b63e0dc7a2e17333288bcb93c365a8ed55baa7b273fcb57e33d2acd859ef4755b63ed016f2b2240e69cb39893'
 end
 
-source url: "https://storage.googleapis.com/manifold-assets/omnibus/im7-src/ImageMagick-#{version}.tar.gz"
+source url: "https://github.com/ImageMagick/ImageMagick/archive/refs/tags/#{version}.tar.gz"
 
 relative_path "ImageMagick-#{version}"
 
