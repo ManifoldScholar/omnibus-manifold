@@ -192,7 +192,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     install.dns.tld = 'vagrant'
 
-    install.vm.hostname = "ubuntu28-install.omnibus-#{project_name}"
+    install.vm.hostname = "ubuntu20-install.omnibus-#{project_name}"
 
     install.vm.provision :shell, path: 'lib/scripts/provision-ubuntu-20.sh'
 
