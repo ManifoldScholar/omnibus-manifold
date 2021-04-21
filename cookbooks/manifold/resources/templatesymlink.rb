@@ -16,7 +16,7 @@ property :notification_targets, Array
 property :restarts, Array, default: []
 
 action :create do
-  template link_to do
+  template new_resource.link_to do
     source new_resource.source
     owner new_resource.owner
     group new_resource.group
@@ -24,17 +24,17 @@ action :create do
     variables new_resource.variables
     helpers new_resource.helpers
     notifies *(new_resource.notification_targets) if new_resource.notification_targets
-    restarts.each do |resource|
+    new_resource.restarts.each do |resource|
       notifies :restart, resource
     end
     action :create
   end
 
-  link "Link #{link_from} to #{link_to}" do
-    target_file link_from
-    to link_to
+  link "Link #{new_resource.link_from} to #{new_resource.link_to}" do
+    target_file new_resource.link_from
+    to new_resource.link_to
     action :create
-    restarts.each do |resource|
+    new_resource.restarts.each do |resource|
       notifies :restart, resource
     end
   end

@@ -68,6 +68,8 @@
 
 # "local" is for Unix domain socket connections only
 local   all         all                               peer map=manifold
+host    all             all             127.0.0.1/32            trust
+host    all             all             ::1/128                 trust
 
 <% node['manifold']['postgresql']['trust_auth_cidr_addresses'].each do |cidr| %>
     host    all         all         <%= cidr %>           trust

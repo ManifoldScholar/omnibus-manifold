@@ -36,12 +36,6 @@ directory elasticsearch_plugin_dir do
   recursive true
 end
 
-execute "chown-elasticsearch-config-dir" do
-  command "chown -R #{elasticsearch_user} #{elasticsearch_config_dir}"
-  user "root"
-  action :run
-end
-
 directory elasticsearch_config_dir do
   owner elasticsearch_user
   mode "0755"
@@ -67,7 +61,16 @@ end
 
 elasticsearch_config = File.join(elasticsearch_dir, "elasticsearch.yml")
 elasticsearch_log_config = File.join(elasticsearch_dir, "log4j2.properties")
+elasticsearch_jvm_options = File.join(elasticsearch_dir, "jvm.options")
 should_notify = omnibus_helper.should_notify?("elasticsearch")
+
+template elasticsearch_jvm_options do
+  source "elasticsearch-jvm.options.erb"
+  owner elasticsearch_user
+  mode "0644"
+  variables(node['manifold']['elasticsearch'].to_hash)
+  notifies :restart, 'service[elasticsearch]', :immediately if should_notify
+end
 
 template elasticsearch_config do
   source "elasticsearch.conf.erb"

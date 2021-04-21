@@ -175,7 +175,7 @@ default['manifold']['postgresql']['sql_mattermost_user'] = "manifold_mattermost"
 default['manifold']['postgresql']['port'] = 3034
 # Postgres allow multi listen_address, comma-separated values.
 # If used, first address from the list will be use for connection
-default['manifold']['postgresql']['listen_address'] = nil
+default['manifold']['postgresql']['listen_address'] = "localhost"
 default['manifold']['postgresql']['max_connections'] = 200
 default['manifold']['postgresql']['md5_auth_cidr_addresses'] = []
 default['manifold']['postgresql']['trust_auth_cidr_addresses'] = []
@@ -350,7 +350,7 @@ default['manifold']['nginx']['status']['options'] = {
 ###
 # Logging
 ###
-default['manifold']['logging']['svlogd_size'] = 200 * 1024 * 1024 # rotate after 200 MB of log data
+  default['manifold']['logging']['svlogd_size'] = 200 * 1024 * 1024 # rotate after 200 MB of log data
 default['manifold']['logging']['svlogd_num'] = 30 # keep 30 rotated log files
 default['manifold']['logging']['svlogd_timeout'] = 24 * 60 * 60 # rotate after 24 hours
 default['manifold']['logging']['svlogd_filter'] = "gzip" # compress logs with gzip
