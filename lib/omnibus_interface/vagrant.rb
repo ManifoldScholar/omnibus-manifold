@@ -1,3 +1,5 @@
+require 'open3'
+
 module OmnibusInterface
   class Vagrant
     def initialize
@@ -45,7 +47,11 @@ module OmnibusInterface
       host_only!
 
       target_in_state? target, desired_state do |other_state|
-        raise "Target `#{target}` is not '#{desired_state}', currently: #{other_state}"
+        if desired_state == "running"
+          bring_up target
+        else
+          raise "Target `#{target}` is not '#{desired_state}', currently: #{other_state}"
+        end
       end
     end
 
@@ -98,6 +104,22 @@ module OmnibusInterface
 
       lines.select(&:target_state?).each_with_object({}.with_indifferent_access) do |line, states|
         states[line.target] = line.data
+      end
+    end
+
+    def bring_up(target)
+      puts "Bringing up target: #{target}"
+      cmd = "vagrant up #{target}"
+      Open3.popen3(cmd) do |stdin, stdout, stderr, thread|
+        { :out => stdout, :err => stderr }.each do |key, stream|
+          Thread.new do
+            until (raw_line = stream.gets).nil? do
+              parsed_line = Hash[:timestamp => Time.now, :line => "#{raw_line}"]
+              puts "#{parsed_line}"
+            end
+          end
+        end
+        thread.join # don't exit until the external process is done
       end
     end
 
