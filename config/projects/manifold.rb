@@ -20,6 +20,9 @@ build_iteration ReadVersion.build_iteration
 
 override :libtool, version: "2.4.6"
 override :rubygems, version: "3.2.16"
+
+# Needed for the rails console to work properly, since it's not included when ruby is installed.
+dependency "rb-readline"
 override "rb-readline", version: "v0.5.5"
 
 # Creates required build directories
