@@ -61,4 +61,6 @@ relative_path "node-v#{version}-#{arch_ext}"
 build do
   mkdir "#{install_dir}/embedded/nodejs"
   sync "#{project_dir}/", "#{install_dir}/embedded/nodejs"
+  mkdir "#{install_dir}/bin"
+  link "#{install_dir}/embedded/nodejs/bin/node", "#{install_dir}/bin/node"
 end
