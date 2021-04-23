@@ -110,17 +110,28 @@ module OmnibusInterface
     def bring_up(target)
       puts "Bringing up target: #{target}"
       cmd = "vagrant up #{target}"
+      status = nil
+      data = {:out => [], :err => []}
       Open3.popen3(cmd) do |stdin, stdout, stderr, thread|
         { :out => stdout, :err => stderr }.each do |key, stream|
           Thread.new do
             until (raw_line = stream.gets).nil? do
-              parsed_line = Hash[:timestamp => Time.now, :line => "#{raw_line}"]
-              puts "#{parsed_line}"
+              data[key].push raw_line
+              puts raw_line
             end
           end
         end
-        thread.join # don't exit until the external process is done
+        status = thread.value
+        thread.join
       end
+
+      unless status.success?
+        warn err
+
+        raise "Failed to run #{args * " "}"
+      end
+
+      data[:out].join("\n")
     end
 
     def parse_response(response)
