@@ -24,6 +24,15 @@ override :libtool, version: "2.4.6"
 # See https://github.com/rubygems/rubygems/issues/3068
 override :rubygems, version: "3.0.8"
 
+# For the Charlock Holmes Gem
+dependency "icu"
+# Centos has GCC 4.8, while recent icu needs 4.9 to compile.
+if centos? && platform_version.start_with?("7")
+  override :icu, version: "58.3"
+else
+  override :icu, version: "69.1"
+end
+
 # Needed for the rails console to work properly, since it's not included when ruby is installed.
 dependency "rb-readline"
 
@@ -74,15 +83,6 @@ override :yarn, version: "1.22.5"
 # For Nokogiri
 dependency "libxml2"
 override :libxml2, version: "2.9.10"
-
-# For the Charlock Holmes Gem
-dependency "icu"
-# Centos has GCC 4.8, while recent icu needs 4.9 to compile.
-if centos?
-  override :icu, version: "58.3"
-else
-  override :icu, version: "69.1"
-end
 
 dependency "imagemagick"
 override :imagemagick, version: "7.0.11-8"
