@@ -55,5 +55,11 @@ OmnibusInterface.configure do
 
       virtualized!
     end
+
+    platform 'centos8' do
+      package_glob 'centos8/*.el8.x86_64.rpm'
+
+      virtualized!
+    end
   end
 end

@@ -64,6 +64,7 @@ build do
   # these are gems which are not shipped but which must be installed in the testers
   bundle_excludes = excluded_groups + %w{development test}
 
+  gem "install bundler:2.1.4", env: env
   bundle "install --without #{bundle_excludes.join(" ")}", env: env
 
   ruby "post-bundle-install.rb", env: env

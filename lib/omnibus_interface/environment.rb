@@ -31,6 +31,8 @@ module OmnibusInterface
         :ubuntu20
       elsif centos7?
         :centos7
+      elsif centos8?
+        :centos8
       elsif macos?
         :macos
       end
@@ -42,6 +44,10 @@ module OmnibusInterface
 
     def centos7?
       centos? && ohai_platform_version.start_with?('7.')
+    end
+
+    def centos8?
+      centos? && ohai_platform_version.start_with?('8.')
     end
 
     def macos?
