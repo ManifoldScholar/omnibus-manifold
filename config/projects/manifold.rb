@@ -19,10 +19,14 @@ build_version the_version
 build_iteration ReadVersion.build_iteration
 
 override :libtool, version: "2.4.6"
-override :rubygems, version: "3.2.16"
+
+# Subsequent versions have a deprecation warning in Ubuntu 18 that will confuse our users.
+# See https://github.com/rubygems/rubygems/issues/3068
+override :rubygems, version: "3.0.8"
 
 # Needed for the rails console to work properly, since it's not included when ruby is installed.
 dependency "rb-readline"
+
 override "rb-readline", version: "v0.5.5"
 
 # Creates required build directories
@@ -73,7 +77,12 @@ override :libxml2, version: "2.9.10"
 
 # For the Charlock Holmes Gem
 dependency "icu"
-override :icu, version: "69.1"
+# Centos has GCC 4.8, while recent icu needs 4.9 to compile.
+if centos?
+  override :icu, version: "58.3"
+else
+  override :icu, version: "69.1"
+end
 
 dependency "imagemagick"
 override :imagemagick, version: "7.0.11-8"

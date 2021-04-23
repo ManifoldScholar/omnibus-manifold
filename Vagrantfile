@@ -43,7 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   platforms = [
     { name: "ubuntu16", box: 'bento/ubuntu-16.04', builder_ip: '10.42.1.2', installer_ip: '10.42.1.3' },
-    { name: "centos7", box: 'bento/centos-7.5', builder_ip: '10.42.1.4', installer_ip: '10.42.1.5' },
+    { name: "centos7", box: 'bento/centos-7.9', builder_ip: '10.42.1.4', installer_ip: '10.42.1.5' },
     { name: "ubuntu18", box: 'bento/ubuntu-18.04', builder_ip: '10.42.1.6', installer_ip: '10.42.1.7' },
     { name: "ubuntu20", box: 'bento/ubuntu-20.04', builder_ip: '10.42.1.8', installer_ip: '10.42.1.9' },
   ]
