@@ -6,7 +6,7 @@ gem 'omnibus', '~> 8.0'
 
 # Use Chef's software definitions. It is recommended that you write your own
 # software definitions, but you can clone/fork Chef's to get you started.
-gem 'omnibus-software', github: 'opscode/omnibus-software', ref: "8d91dc6a566aba77c864678680d4142561b2f655"
+gem 'omnibus-software', github: 'opscode/omnibus-software', ref: "3ac1dbed61173f0919b9f8215bc1af00d7a6c27b"
 gem 'active_interaction'
 gem 'activesupport', '~> 5.2', require: false
 gem 'attr_lazy'
