@@ -136,3 +136,7 @@ if test -f "${DEST_DIR}/embedded/bin/symlink_ctl_cmds"; then
   ${DEST_DIR}/embedded/bin/symlink_ctl_cmds ${DEST_DIR}
 fi
 
+if test -f "/var/opt/manifold/postgresql/data/PG_VERSION"; then
+  # We have an existing installation
+	${DEST_DIR}/bin/manifold-ctl upgrade
+fi

@@ -88,6 +88,7 @@ dependency "imagemagick"
 override :imagemagick, version: "7.0.11-8"
 
 dependency "postgresql"
+override "postgresql", version: "13.2"
 
 dependency "elasticsearch"
 override :elasticsearch, version: "7.12.0"
