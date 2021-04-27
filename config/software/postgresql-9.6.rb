@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-name "postgresql"
-default_version "13.2"
+name "postgresql-9.6"
+default_version "9.6.18"
 
 license "PostgreSQL"
 license_file "COPYRIGHT"
@@ -26,7 +26,6 @@ dependency "openssl"
 dependency "libedit"
 dependency "ncurses"
 dependency "config_guess"
-dependency "postgresql-9.6"
 
 if osx?
   dependency "libossp-uuid"
@@ -34,12 +33,8 @@ else
   dependency "libuuid"
 end
 
-#
-# Version 13.x will EoL November 13, 2025
-#
-version "13.2" do
-  source sha256: "5fd7fcd08db86f5b2aed28fcfaf9ae0aca8e9428561ac547764c2a2b0f41adfc",
-    url: "https://ftp.postgresql.org/pub/source/v13.2/postgresql-13.2.tar.bz2"
+version "9.6.18" do
+  source sha256: "517ec282b785e6d22f360c30ba0c5e2a506fca5ca07dcc545427511d94c89999"
 end
 
 source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
@@ -66,10 +61,4 @@ build do
 
   make "world -j #{workers}", env: env
   make "install-world", env: env
-
-  block 'link bin files' do
-    Dir.glob("#{prefix}/bin/*").each do |bin_file|
-      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
 end

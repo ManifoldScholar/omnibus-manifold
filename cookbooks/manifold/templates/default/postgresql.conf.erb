@@ -178,7 +178,7 @@ wal_buffers = <%= node['manifold']['postgresql']['wal_buffers'] %> # -1     # mi
 #commit_siblings = 5      # range 1-1000
 
 # - Checkpoints -
-<% if pg_helper.database_version == "9.5" || pg_helper.database_version == "9.6" %>
+<% if pg_helper.database_version == "9.5" || pg_helper.database_version == "9.6" || pg_helper.database_version&.major >= "13" %>
     min_wal_size = <%= node['manifold']['postgresql']['min_wal_size'] %>
     max_wal_size = <%= node['manifold']['postgresql']['max_wal_size'] %>
 <% else %>
