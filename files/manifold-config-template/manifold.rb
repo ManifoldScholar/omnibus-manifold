@@ -129,39 +129,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['work_mem'] = "8MB"
 # postgresql['maintenance_work_mem'] = "16MB"
 # postgresql['effective_cache_size'] = "1MB"
-# postgresql['checkpoint_segments'] = 10
-# postgresql['checkpoint_timeout'] = "5min"
-# postgresql['checkpoint_completion_target'] = 0.9
-# postgresql['checkpoint_warning'] = "30s"
-# postgresql['wal_buffers'] = "-1"
-# postgresql['autovacuum'] = "on"
-# postgresql['log_autovacuum_min_duration'] = "-1"
-# postgresql['autovacuum_max_workers'] = "3"
-# postgresql['autovacuum_naptime'] = "1min"
-# postgresql['autovacuum_vacuum_threshold'] = "50"
-# postgresql['autovacuum_analyze_threshold'] = "50"
-# postgresql['autovacuum_vacuum_scale_factor'] = "0.02"
-# postgresql['autovacuum_analyze_scale_factor'] = "0.01"
-# postgresql['autovacuum_freeze_max_age'] = "200000000"
-# postgresql['autovacuum_vacuum_cost_delay'] = "20ms"
-# postgresql['autovacuum_vacuum_cost_limit'] = "-1"
-# postgresql['statement_timeout'] = "0"
-# postgresql['log_line_prefix'] = "%a"
-# postgresql['track_activity_query_size'] = "1024"
 # postgresql['shared_preload_libraries'] = nil
-
-### Replication settings
 # postgresql['sql_replication_user'] = "manifold_replicator"
-# postgresql['wal_level'] = "hot_standby"
-# postgresql['max_wal_senders'] = 5
-# postgresql['wal_keep_segments'] = 10
-# postgresql['hot_standby'] = "off"
-# postgresql['max_standby_archive_delay'] = "30s"
-# postgresql['max_standby_streaming_delay'] = "30s"
-
-### Available in PostgreSQL 9.6 and later
-# postgresql['min_wal_size'] = 80MB
-# postgresql['max_wal_size'] = 1GB
 
 ################################################################################
 ## Manifold Redis

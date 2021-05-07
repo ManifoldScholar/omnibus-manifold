@@ -93,7 +93,7 @@ class UpgradePostgres96To13
   def run_initdb!
     cmd = [
       @new_bin.join("initdb").to_s,
-      "--locale=C",
+      "--locale=#{ENV["LANG"] || "en_US.utf8"}",
       "-D", @tmp_data_dir.to_s,
       "-E", "UTF8"
     ]
