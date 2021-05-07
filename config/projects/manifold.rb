@@ -22,7 +22,7 @@ override :libtool, version: "2.4.6"
 
 # Subsequent versions have a deprecation warning in Ubuntu 18 that will confuse our users.
 # See https://github.com/rubygems/rubygems/issues/3068
-override :rubygems, version: "3.0.8"
+override :rubygems, version: "3.2.17"
 
 # For the Charlock Holmes Gem
 dependency "icu"
@@ -49,7 +49,7 @@ dependency "openssl"
 override :openssl, version: "1.1.1k"
 
 dependency "ruby"
-override :ruby, version: "2.6.7"
+override :ruby, version: "2.7.3"
 
 # We can go to v17 when Manifold is on Ruby v2.7 or higher
 dependency "chef"
