@@ -198,38 +198,8 @@ end
 default['manifold']['postgresql']['work_mem'] = "8MB"
 default['manifold']['postgresql']['maintenance_work_mem'] = "16MB"
 default['manifold']['postgresql']['effective_cache_size'] = "#{(node['memory']['total'].to_i / 2) / (1024)}MB"
-default['manifold']['postgresql']['log_min_duration_statement'] = -1 # Disable slow query logging by default
-default['manifold']['postgresql']['checkpoint_segments'] = 10
-default['manifold']['postgresql']['min_wal_size'] = '80MB'
-default['manifold']['postgresql']['max_wal_size'] = '1GB'
-default['manifold']['postgresql']['checkpoint_timeout'] = "5min"
-default['manifold']['postgresql']['checkpoint_completion_target'] = 0.9
-default['manifold']['postgresql']['checkpoint_warning'] = "30s"
-default['manifold']['postgresql']['wal_buffers'] = "-1"
-default['manifold']['postgresql']['autovacuum'] = "on"
-default['manifold']['postgresql']['log_autovacuum_min_duration'] = "-1"
-default['manifold']['postgresql']['autovacuum_max_workers'] = "3"
-default['manifold']['postgresql']['autovacuum_naptime'] = "1min"
-default['manifold']['postgresql']['autovacuum_vacuum_threshold'] = "50"
-default['manifold']['postgresql']['autovacuum_analyze_threshold'] = "50"
-default['manifold']['postgresql']['autovacuum_vacuum_scale_factor'] = "0.02" # 10x lower than PG defaults
-default['manifold']['postgresql']['autovacuum_analyze_scale_factor'] = "0.01" # 10x lower than PG defaults
-default['manifold']['postgresql']['autovacuum_freeze_max_age'] = "200000000"
-default['manifold']['postgresql']['autovacuum_vacuum_cost_delay'] = "20ms"
-default['manifold']['postgresql']['autovacuum_vacuum_cost_limit'] = "-1"
-default['manifold']['postgresql']['statement_timeout'] = "0"
-default['manifold']['postgresql']['log_line_prefix'] = nil
-default['manifold']['postgresql']['track_activity_query_size'] = "1024"
 default['manifold']['postgresql']['shared_preload_libraries'] = nil
-
-# Replication settings
 default['manifold']['postgresql']['sql_replication_user'] = "manifold_replicator"
-default['manifold']['postgresql']['wal_level'] = "minimal"
-default['manifold']['postgresql']['max_wal_senders'] = 0
-default['manifold']['postgresql']['wal_keep_segments'] = 10
-default['manifold']['postgresql']['hot_standby'] = "off"
-default['manifold']['postgresql']['max_standby_archive_delay'] = "30s"
-default['manifold']['postgresql']['max_standby_streaming_delay'] = "30s"
 
 ####
 # Redis
