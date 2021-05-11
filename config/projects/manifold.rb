@@ -72,7 +72,7 @@ dependency "pandoc-binary"
 override "pandoc-binary", version: "2.6"
 
 dependency "bundler"
-override :bundler, version: "1.17.3"
+override :bundler, version: "2.2.17"
 
 dependency "nodejs-binary"
 override "nodejs-binary", version: "12.22.1"
