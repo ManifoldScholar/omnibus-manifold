@@ -3,13 +3,10 @@ omnibus_helper = OmnibusHelper.new(node)
 
 svc = params[:name]
 elasticsearch_dir = node['manifold']['elasticsearch']['dir']
-elasticsearch_data_dir = node['manifold']['elasticsearch']['data_dir']
+elasticsearch_data_dir = node['manifold']['elasticsearch']['data_dir_v7']
 elasticsearch_log_dir = node['manifold']['elasticsearch']['log_directory']
-elasticsearch_bind = node['manifold']['elasticsearch']['bind']
-elasticsearch_port = node['manifold']['elasticsearch']['port']
 elasticsearch_user = account_helper.elasticsearch_user
 elasticsearch_group = account_helper.elasticsearch_group
-elasticsearch_config = ""
 elasticsearch_plugin_dir= "#{node['package']['install-dir']}/embedded/elasticsearch/plugins"
 elasticsearch_config_dir= "#{node['package']['install-dir']}/embedded/elasticsearch/config"
 

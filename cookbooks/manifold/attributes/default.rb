@@ -354,6 +354,7 @@ default['manifold']['elasticsearch']['enable'] = true
 default['manifold']['elasticsearch']['ha'] = false
 default['manifold']['elasticsearch']['dir'] = "/var/opt/manifold/elasticsearch"
 default['manifold']['elasticsearch']['data_dir'] = "/var/opt/manifold/elasticsearch/data"
+default['manifold']['elasticsearch']['data_dir_v7'] = "/var/opt/manifold/elasticsearch/v7data"
 default['manifold']['elasticsearch']['log_directory'] = "/var/log/manifold/elasticsearch"
 default['manifold']['elasticsearch']['username'] = "manifold-elasticsearch"
 default['manifold']['elasticsearch']['bind'] = '127.0.0.1'
