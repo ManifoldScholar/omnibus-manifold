@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :virtualbox do |vb|
     vb.customize [
       "modifyvm", :id,
-      "--memory", "3084",
+      "--memory", "4096",
       "--cpus",   "2",
       "--cableconnected0", "on",
       "--cableconnected1", "on",
@@ -92,11 +92,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # The path to the Berksfile to use with Vagrant Berkshelf
   config.berkshelf.berksfile_path = './Berksfile'
 
-  # Disable vagrant-vbguest to update VirtualBox Guest Additions
-  # config.vbguest.auto_update = false
-
-  # config.ssh.max_tries      = 40
-  # config.ssh.timeout        = 120
   config.ssh.forward_agent  = true
 
   config.vm.network :private_network, type: 'dhcp'
