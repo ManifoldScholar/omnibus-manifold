@@ -1,3 +1,4 @@
+require "json"
 require "open3"
 require "pathname"
 
@@ -25,6 +26,16 @@ class UpgradePostgres96To13
   BASE_DIR = Pathname.new("/opt/manifold")
   DATA_DIR = Pathname.new("/var/opt/manifold/postgresql/data")
 
+  OPTIONS_TO_SETTINGS = {
+    "--encoding" => "server_encoding",
+    "--lc-collate" => "lc_collate",
+    "--lc-ctype" => "lc_ctype",
+    "--lc-messages" => "lc_messages",
+    "--lc-monetary" => "lc_monetary",
+    "--lc-numeric" => "lc_numeric",
+    "--lc-time" => "lc_time",
+  }.freeze
+
   attr_reader :ctl
   attr_reader :data_version
 
@@ -41,6 +52,8 @@ class UpgradePostgres96To13
     @old_bin = @old_version.join("bin")
     @new_bin = @new_version.join("bin")
     @pg_user = "manifold-psql"
+
+    @extractor = build_extractor
   end
 
   def should_run?
@@ -91,11 +104,12 @@ class UpgradePostgres96To13
   end
 
   def run_initdb!
+    locale_args = extract_previous_locale_settings
+
     cmd = [
       @new_bin.join("initdb").to_s,
-      "--locale=#{ENV["LANG"] || "en_US.utf8"}",
+      *locale_args,
       "-D", @tmp_data_dir.to_s,
-      "-E", "UTF8"
     ]
 
     exec_cmd! cmd
@@ -113,5 +127,86 @@ class UpgradePostgres96To13
     ]
 
     exec_cmd! cmd
+  end
+
+  def extract_previous_locale_settings
+    OPTIONS_TO_SETTINGS.each_with_object([]) do |(option, setting_name), args|
+      value = @extractor.call setting_name
+
+      next unless value
+
+      args << "--locale=#{value}" if setting_name == "lc_collate"
+
+      args << "#{option}=#{value}"
+    end
+  end
+
+  def build_extractor
+    PostgresSettingExtractor.new(
+      sudo_user: @pg_user,
+      pg_bin: @old_bin.join("postgres").to_s,
+      data_dir: @cur_data_dir.to_s,
+    )
+  end
+end
+
+class PostgresSettingExtractor
+  def initialize(sudo_user: nil, pg_bin:, data_dir:, database: "postgres")
+    @sudo_user = sudo_user
+    @pg_bin = pg_bin
+    @data_dir = data_dir
+    @database = database
+
+    @env = { "PGDATA" => data_dir }
+    @command = compile_command
+    @spawn_options = { chdir: data_dir }
+  end
+
+  # @param [String] setting_name
+  # @return [String]
+  def call(setting_name)
+    output = raw_output_for setting_name
+
+    pattern = build_parser_pattern_for setting_name
+
+    output[pattern, 1]
+  end
+
+  private
+
+  def raw_output_for(setting_name)
+    options = build_spawn_options_for setting_name
+
+    stdout, status = Open3.capture2(@env, *@command, options)
+
+    raise "Something went wrong with extracting PG settings: #{status}" unless status.success?
+
+    return stdout
+  end
+
+  def build_parser_pattern_for(setting_name)
+    /1: #{setting_name} = "([^"]+)"/mi
+  end
+
+  def build_setting_query_for(setting_name)
+    <<~SQL.strip
+    SHOW #{setting_name};
+    SQL
+  end
+
+  def build_spawn_options_for(setting_name)
+    @spawn_options.merge(stdin_data: build_setting_query_for(setting_name))
+  end
+
+  def compile_command
+    cmd = []
+
+    if @sudo_user
+      cmd << "sudo" << "-u" << @sudo_user
+    end
+
+    cmd << @pg_bin << "--single"
+    cmd << "-D" << @data_dir
+    cmd << @database
   end
 end
