@@ -29,7 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.dns.tld = 'vagrant'
 
   config.omnibus.install_url = "https://omnitruck.chef.io/install.sh"
-  config.omnibus.chef_version = :latest
+  config.omnibus.chef_version = "16.13.16"
 
   config.vm.provider :virtualbox do |vb|
     vb.customize [
