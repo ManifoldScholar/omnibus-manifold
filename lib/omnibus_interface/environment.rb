@@ -23,9 +23,7 @@ module OmnibusInterface
     end
 
     attr_lazy_reader :platform do
-      if ubuntu16?
-        :ubuntu16
-      elsif ubuntu18?
+      if ubuntu18?
         :ubuntu18
       elsif ubuntu20?
         :ubuntu20
@@ -56,10 +54,6 @@ module OmnibusInterface
 
     def ubuntu?
       ohai_platform == 'ubuntu'
-    end
-
-    def ubuntu16?
-      ubuntu? && ohai_platform_version == '16.04'
     end
 
     def ubuntu18?

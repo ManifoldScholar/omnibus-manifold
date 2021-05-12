@@ -56,13 +56,6 @@ vagrant up centos7-builder
 bin/rake build:centos7
 ```
 
-##### Ubuntu 16
-
-```shell
-vagrant up ubuntu16-builder
-bin/rake build:ubuntu16
-```
-
 ##### Ubuntu 18
 
 ```shell

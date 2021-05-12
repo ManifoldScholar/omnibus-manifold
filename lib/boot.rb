@@ -26,13 +26,7 @@ OmnibusInterface.configure do
     platform 'macos' do
       package_glob 'macos/*.pkg'
     end
-
-    platform 'ubuntu16' do
-      package_glob 'ubuntu16/*.deb'
-
-      virtualized!
-    end
-
+    
     platform 'ubuntu18' do
       package_glob 'ubuntu18/*.deb'
 
