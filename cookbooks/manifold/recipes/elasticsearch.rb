@@ -66,7 +66,7 @@ template elasticsearch_jvm_options do
   owner elasticsearch_user
   mode "0644"
   variables(node['manifold']['elasticsearch'].to_hash)
-  notifies :restart, 'service[elasticsearch]', :immediately if should_notify
+  notifies :restart, 'service[elasticsearch]', :delayed if should_notify
 end
 
 template elasticsearch_config do
@@ -74,7 +74,7 @@ template elasticsearch_config do
   owner elasticsearch_user
   mode "0644"
   variables(node['manifold']['elasticsearch'].to_hash)
-  notifies :restart, 'service[elasticsearch]', :immediately if should_notify
+  notifies :restart, 'service[elasticsearch]', :delayed if should_notify
 end
 
 template elasticsearch_log_config do
@@ -82,7 +82,7 @@ template elasticsearch_log_config do
   owner elasticsearch_user
   mode "0644"
   variables(node['manifold']['elasticsearch'].to_hash)
-  notifies :restart, 'service[elasticsearch]', :immediately if should_notify
+  notifies :restart, 'service[elasticsearch]', :delayed if should_notify
 end
 
 runit_service "elasticsearch" do
