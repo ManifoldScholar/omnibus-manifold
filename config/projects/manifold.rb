@@ -84,6 +84,9 @@ override :yarn, version: "1.22.5"
 dependency "libxml2"
 override :libxml2, version: "2.9.10"
 
+dependency "ghostscript"
+override :ghostscript, version: "9.54.0"
+
 dependency "imagemagick"
 override :imagemagick, version: "7.0.11-8"
 

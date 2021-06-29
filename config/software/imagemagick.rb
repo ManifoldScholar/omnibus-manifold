@@ -14,6 +14,7 @@ dependency "liblzma"
 dependency "libtiff"
 dependency "libxml2"
 dependency "zlib"
+dependency "ghostscript"
 
 version '7.0.11-8' do
   source sha512: '069cd3e8b46e7da75a860bb6f03a23a24acde75b63e0dc7a2e17333288bcb93c365a8ed55baa7b273fcb57e33d2acd859ef4755b63ed016f2b2240e69cb39893'
@@ -45,7 +46,6 @@ build do
     --without-pango
     --without-lcms
     --without-gvc
-    --without-gslib
     --without-freetype
   ]
 
